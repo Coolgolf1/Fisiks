@@ -215,6 +215,7 @@ def level_1(screen, screen_size):
     menu_condition = False
     clicked = False
     quit_condition = False
+    cancel = False
 
     # Black Lines
     lines.append(StaticLine(space, [(screen_size[0]*0.3125, screen_size[1] *
@@ -260,23 +261,30 @@ def level_1(screen, screen_size):
                 running = False
                 quit_condition = True
             if event.type == pygame.MOUSEBUTTONDOWN and not end:
-                points = [event.pos]
-                drawing = True
+                if not cancel:
+                    points = [event.pos]
+                    drawing = True
+                cancel = False
             if event.type == pygame.MOUSEBUTTONUP and not end:
-                clicked = True
-                pos = pygame.mouse.get_pos()
-                if drawing and len(points) > 1:
-                    drawings.append(FreehandDrawing(space, points))
+                if not cancel:
+                    clicked = True
+                    pos = pygame.mouse.get_pos()
+                    if drawing and len(points) > 1:
+                        drawings.append(FreehandDrawing(space, points))
                 points = []
-                if drawing:
+                if drawing and not cancel:
                     count += 1
                 drawing = False
+                cancel = False
             if event.type == pygame.MOUSEBUTTONDOWN and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
                 if pygame.mouse.get_pressed()[0]:
                     points.append(event.pos)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not end:
+                    cancel = True
 
         screen.blit(permanent_surface, (0, 0))
 
@@ -293,7 +301,7 @@ def level_1(screen, screen_size):
         for line in jar_lines:
             line.jar_draw(screen)
 
-        if drawing and len(points) > 1:
+        if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
 
         for drawing in drawings:
@@ -303,7 +311,7 @@ def level_1(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                 end_world, thickness)
+                                end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -386,6 +394,7 @@ def level_2(screen, screen_size):
     menu_condition = False
     clicked = False
     quit_condition = False
+    cancel = False
 
     # Black Lines
     lines.append(StaticLine(space, [
@@ -405,10 +414,10 @@ def level_2(screen, screen_size):
     jar_lines.append(StaticLine(space, [(screen_size[0]*(0.574-0.1171875), screen_size[1]),
                      (screen_size[0]*(0.574-0.15626), screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
-    # ball = Ball(space, (screen_size[0]*0.5,
-    #           screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (screen_size[0]*0.5,
+               screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    ball = Ball(space, (640, 360), screen_size[1]*0.0555555555555556)
+    #ball = Ball(space, (640, 360), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -423,23 +432,30 @@ def level_2(screen, screen_size):
                 running = False
                 quit_condition = True
             if event.type == pygame.MOUSEBUTTONDOWN and not end:
-                points = [event.pos]
-                drawing = True
+                if not cancel:
+                    points = [event.pos]
+                    drawing = True
+                cancel = False
             if event.type == pygame.MOUSEBUTTONUP and not end:
-                clicked = True
-                pos = pygame.mouse.get_pos()
-                if drawing and len(points) > 1:
-                    drawings.append(FreehandDrawing(space, points))
+                if not cancel:
+                    clicked = True
+                    pos = pygame.mouse.get_pos()
+                    if drawing and len(points) > 1:
+                        drawings.append(FreehandDrawing(space, points))
                 points = []
-                if drawing:
+                if drawing and not cancel:
                     count += 1
                 drawing = False
+                cancel = False
             if event.type == pygame.MOUSEBUTTONDOWN and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
                 if pygame.mouse.get_pressed()[0]:
                     points.append(event.pos)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not end:
+                    cancel = True
 
         screen.blit(permanent_surface, (0, 0))
 
@@ -448,13 +464,15 @@ def level_2(screen, screen_size):
 
         ball.draw(screen)
 
+        # space.debug_draw(draw_options)
+
         for line in lines:
             line.draw(screen)
 
         for line in jar_lines:
             line.jar_draw(screen)
 
-        if drawing and len(points) > 1:
+        if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
 
         for drawing in drawings:
@@ -464,7 +482,7 @@ def level_2(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                 end_world, thickness)
+                                end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -542,15 +560,22 @@ def level_3(screen, screen_size):
     drawing = False
     lines = []
     jar_lines = []
+    spring_lines = []
     thickness = 10
     y_scalable_constant = 175/720
     menu_condition = False
     clicked = False
     quit_condition = False
+    cancel = False
 
     # Black Lines
     lines.append(StaticLine(space, [
-                 (screen_size[0]*0.3, screen_size[1]*0.3), (screen_size[0]*0.7, screen_size[1]*0.3)], 10))
+                (0, screen_size[1]*0.3), (screen_size[0]*0.2045, screen_size[1]*0.3)], 10))
+    lines.append(StaticLine(space, [
+                (screen_size[0]*0.2, screen_size[1]*0.3), (screen_size[0]*0.2, screen_size[1])], 10))
+    # Spring Lines
+    spring_lines.append(StaticLine(space, [
+                (screen_size[0]*0.4, screen_size[1]*0.99), (screen_size[0]*0.5, screen_size[1]*0.99)], 10))
     # Limits
     lines.append(StaticLine(space, [(0, 0), (0, screen_size[1])], 1))
     lines.append(StaticLine(
@@ -559,17 +584,17 @@ def level_3(screen, screen_size):
     lines.append(StaticLine(
         space, [(0, screen_size[1]), (screen_size[0], screen_size[1])], 1))
     # Jar
-    jar_lines.append(StaticLine(space, [
-                     (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*(0.574-0.1171875), screen_size[1])], 5))
-    jar_lines.append(StaticLine(space, [
-                     (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*0.574, screen_size[1]*y_scalable_constant*3)], 5))
-    jar_lines.append(StaticLine(space, [(screen_size[0]*(0.574-0.1171875), screen_size[1]),
-                     (screen_size[0]*(0.574-0.15626), screen_size[1]*y_scalable_constant*3)], 5))
+    # jar_lines.append(StaticLine(space, [
+    #                  (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*(0.574-0.1171875), screen_size[1])], 5))
+    # jar_lines.append(StaticLine(space, [
+    #                  (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*0.574, screen_size[1]*y_scalable_constant*3)], 5))
+    # jar_lines.append(StaticLine(space, [(screen_size[0]*(0.574-0.1171875), screen_size[1]),
+    #                  (screen_size[0]*(0.574-0.15626), screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
     # ball = Ball(space, (screen_size[0]*0.5,
     #           screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    ball = Ball(space, (640, 360), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (150, 200), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -584,23 +609,30 @@ def level_3(screen, screen_size):
                 running = False
                 quit_condition = True
             if event.type == pygame.MOUSEBUTTONDOWN and not end:
-                points = [event.pos]
-                drawing = True
+                if not cancel:
+                    points = [event.pos]
+                    drawing = True
+                cancel = False
             if event.type == pygame.MOUSEBUTTONUP and not end:
-                clicked = True
-                pos = pygame.mouse.get_pos()
-                if drawing and len(points) > 1:
-                    drawings.append(FreehandDrawing(space, points))
+                if not cancel:
+                    clicked = True
+                    pos = pygame.mouse.get_pos()
+                    if drawing and len(points) > 1:
+                        drawings.append(FreehandDrawing(space, points))
                 points = []
-                if drawing:
+                if drawing and not cancel:
                     count += 1
                 drawing = False
+                cancel = False
             if event.type == pygame.MOUSEBUTTONDOWN and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
                 if pygame.mouse.get_pressed()[0]:
                     points.append(event.pos)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not end:
+                    cancel = True
 
         screen.blit(permanent_surface, (0, 0))
 
@@ -609,13 +641,15 @@ def level_3(screen, screen_size):
 
         ball.draw(screen)
 
+        # space.debug_draw(draw_options)
+
         for line in lines:
             line.draw(screen)
 
         for line in jar_lines:
             line.jar_draw(screen)
 
-        if drawing and len(points) > 1:
+        if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
 
         for drawing in drawings:
@@ -625,7 +659,7 @@ def level_3(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                 end_world, thickness)
+                                end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])

@@ -68,6 +68,11 @@ class StaticLine:
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "green", start_pos, end_pos, self.thickness)
 
+    def spring_draw(self, screen):
+        self.line_shape.elasticity = 1.8
+        start_pos = self.line_shape.a
+        end_pos = self.line_shape.b
+        pygame.draw.line(screen, "orange", start_pos, end_pos, self.thickness)
 
 class Ball:
     def __init__(self, space, pos, radius):
