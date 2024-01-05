@@ -61,7 +61,7 @@ while running:
             quit_condition = f.level_2(screen, screen_size)
         if (pos[0] >= L3BPos[0]) and (pos[0] <= L3BPos[0] + L3BSize[0]) and (pos[1] >= L3BPos[1]) and (pos[1] <= L3BPos[1] + L3BSize[1]):
             quit_condition = f.level_3(screen, screen_size)
-        if quit_condition: 
+        if quit_condition:
             running = False
     if settings:
         pass

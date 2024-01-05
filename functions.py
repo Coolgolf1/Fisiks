@@ -131,20 +131,23 @@ def play_menu(screen, screen_size):
 
     return Level1Button, Level2Button, Level3Button
 
+
 def buttons_in_game(screen_size):
     buttons_font_size_IG = int(screen_size[1] * 0.06)
-    buttons_font_IG = pygame.font.SysFont("Calibri", buttons_font_size_IG, True)
+    buttons_font_IG = pygame.font.SysFont(
+        "Calibri", buttons_font_size_IG, True)
     # Restart Button
     RestartButtonIG = Button((screen_size[0]*0.06, screen_size[1]*0.005),
-                           (screen_size[0]*0.05, screen_size[1]*0.05), 1, "R")
+                             (screen_size[0]*0.05, screen_size[1]*0.05), 1, "R")
     RIGBPos = RestartButtonIG.position
     RIGBSize = RestartButtonIG.size
     # Menu Button
     MenuButtonIG = Button((screen_size[0]*0.005, screen_size[1]*0.005),
-                           (screen_size[0]*0.05, screen_size[1]*0.05), 1, "M")
+                          (screen_size[0]*0.05, screen_size[1]*0.05), 1, "M")
     MIGBPos = MenuButtonIG.position
     MIGBSize = MenuButtonIG.size
     return buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize
+
 
 def final_menu(screen_size):
     # End Box
@@ -246,8 +249,9 @@ def level_1(screen, screen_size):
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
-    
-    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(screen_size)
+
+    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
+        screen_size)
 
     running = True
     while running:
@@ -344,9 +348,9 @@ def level_1(screen, screen_size):
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_1(screen, screen_size)
+                screen.fill("white")
+                running = False
+                quit_condition = level_1(screen, screen_size)
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
@@ -357,6 +361,7 @@ def level_1(screen, screen_size):
         space.step(1/FPS)
 
     return quit_condition
+
 
 def level_2(screen, screen_size):
     clock = pygame.time.Clock()
@@ -407,8 +412,9 @@ def level_2(screen, screen_size):
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
-    
-    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(screen_size)
+
+    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
+        screen_size)
 
     running = True
     while running:
@@ -441,7 +447,6 @@ def level_2(screen, screen_size):
         MenuButtonIG.draw(screen, buttons_font_IG)
 
         ball.draw(screen)
-
 
         for line in lines:
             line.draw(screen)
@@ -504,9 +509,9 @@ def level_2(screen, screen_size):
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    level_2(screen, screen_size)
+                screen.fill("white")
+                running = False
+                level_2(screen, screen_size)
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
@@ -517,6 +522,7 @@ def level_2(screen, screen_size):
         space.step(1/FPS)
 
     return quit_condition
+
 
 def level_3(screen, screen_size):
     clock = pygame.time.Clock()
@@ -567,8 +573,9 @@ def level_3(screen, screen_size):
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
-    
-    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(screen_size)
+
+    buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
+        screen_size)
 
     running = True
     while running:
@@ -601,7 +608,6 @@ def level_3(screen, screen_size):
         MenuButtonIG.draw(screen, buttons_font_IG)
 
         ball.draw(screen)
-
 
         for line in lines:
             line.draw(screen)
@@ -659,9 +665,9 @@ def level_3(screen, screen_size):
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_3(screen, screen_size)
+                screen.fill("white")
+                running = False
+                quit_condition = level_3(screen, screen_size)
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
@@ -670,8 +676,9 @@ def level_3(screen, screen_size):
         pygame.display.flip()
         clock.tick(FPS)
         space.step(1/FPS)
-    
+
     return quit_condition
+
 
 def settings_menu(screen, screen_size):
     screen.fill("red")

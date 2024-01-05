@@ -86,6 +86,7 @@ class Ball:
         angle = self.body.angle
         pygame.draw.circle(screen, [231, 84, 128], pos, self.radius)
         end_line = pymunk.Vec2d(self.radius, 0).rotated(angle)
-        pygame.draw.line(screen, "blue", pos, (pos[0] + end_line.x, pos[1] + end_line.y), 2)
-        pygame.draw.line(screen, "blue", pos, (pos[0] - end_line.x, pos[1] - end_line.y), 2)
-        
+        pygame.draw.line(screen, "blue", pos,
+                         (pos[0] + end_line.x, pos[1] + end_line.y), 2)
+        pygame.draw.line(screen, "blue", pos,
+                         (pos[0] - end_line.x, pos[1] - end_line.y), 2)
