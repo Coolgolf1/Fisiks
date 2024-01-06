@@ -111,25 +111,40 @@ def select_joke(screen_size: tuple):
 
 def play_menu(screen, screen_size):
     screen.fill("white")
-    button_x1 = screen_size[0] * 0.33
-    button_x2 = screen_size[0] * 0.50
-    button_x3 = screen_size[0] * 0.67
-    buttons_font_size = int(screen_size[1] * 0.06)
-    button_width = int(screen_size[0] * 0.15)
-    button_height = int(screen_size[1] * 0.08)
+    button_x1 = screen_size[0] * 0.17
+    button_x2 = screen_size[0] * 0.41
+    button_x3 = screen_size[0] * 0.65
+    buttons_font_size = int(screen_size[1] * 0.08)
+    button_width = int(screen_size[0] * 0.2)
+    button_height = int(screen_size[1] * 0.1)
     buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
-
-    Level1Button = Button((button_x1, 360),
+    bg1 = pygame.image.load(".\\assets\\first_level.png")
+    bg1 = pygame.transform.scale(bg1, (screen_size[0]*0.2, screen_size[1]*0.2))
+    screen.blit(bg1, (screen_size[0] * 0.17, screen_size[1]*0.35))
+    pygame.draw.rect(screen, "black", [screen_size[0] * 0.17, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
+    Level1Button = Button((button_x1, screen_size[1]*0.6),
                           (button_width, button_height), 2, "Nivel 1")
     Level1Button.draw(screen, buttons_font)
-    Level2Button = Button((button_x2, 360),
+    bg2 = pygame.image.load(".\\assets\\second_level.png")
+    bg2 = pygame.transform.scale(bg2, (screen_size[0]*0.2, screen_size[1]*0.2))
+    screen.blit(bg2, (screen_size[0] * 0.41, screen_size[1]*0.35))
+    pygame.draw.rect(screen, "black", [screen_size[0] * 0.41, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
+    Level2Button = Button((button_x2, screen_size[1]*0.6),
                           (button_width, button_height), 2, "Nivel 2")
     Level2Button.draw(screen, buttons_font)
-    Level3Button = Button((button_x3, 360),
+    bg3 = pygame.image.load(".\\assets\\third_level.png")
+    bg3 = pygame.transform.scale(bg3, (screen_size[0]*0.2, screen_size[1]*0.2))
+    screen.blit(bg3, (screen_size[0] * 0.65, screen_size[1]*0.35))
+    pygame.draw.rect(screen, "black", [screen_size[0] * 0.65, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
+    Level3Button = Button((button_x3, screen_size[1]*0.6),
                           (button_width, button_height), 2, "Nivel 3")
     Level3Button.draw(screen, buttons_font)
+    BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01), (screen_size[1]*0.1, screen_size[0]*0.03), 2, "Atrás")
+    back_button_font_size = int(screen_size[1] * 0.04)
+    back_button_font = pygame.font.SysFont("Calibri", back_button_font_size, True)
+    BackButton.draw(screen, back_button_font)
 
-    return Level1Button, Level2Button, Level3Button
+    return Level1Button, Level2Button, Level3Button, BackButton
 
 
 def buttons_in_game(screen_size):
@@ -199,8 +214,8 @@ def level_1(screen, screen_size):
     space = pymunk.Space()
     space.gravity = (0, 200)
 
-    draw_options = pymunk.pygame_util.DrawOptions(screen)
-    space.debug_draw(draw_options)
+    # draw_options = pymunk.pygame_util.DrawOptions(screen)
+    # space.debug_draw(draw_options)
 
     permanent_surface = pygame.Surface(screen.get_size())
     permanent_surface.fill("white")
@@ -230,12 +245,12 @@ def level_1(screen, screen_size):
     lines.append(StaticLine(space, [(screen_size[0], (screen_size[1])*(100/720)*4),
                  (screen_size[0]*0.84375, screen_size[1]*y_scalable_constant*3)], 10))
     # Limits
-    lines.append(StaticLine(space, [(0, 0), (0, screen_size[1])], 1))
+    lines.append(StaticLine(space, [(-500, 0), (-500, screen_size[1])], 1000))
     lines.append(StaticLine(
-        space, [(screen_size[0], 0), (screen_size[0], screen_size[1])], 1))
-    lines.append(StaticLine(space, [(0, 0), (screen_size[0], 0)], 1))
+        space, [(500+screen_size[0], 0), (500+screen_size[0], screen_size[1])], 1000))
+    lines.append(StaticLine(space, [(0, -500), (screen_size[0], -500)], 1000))
     lines.append(StaticLine(
-        space, [(0, screen_size[1]), (screen_size[0], screen_size[1])], 1))
+        space, [(0, 500+screen_size[1]), (screen_size[0], 500+screen_size[1])], 1000))
     # Jar
     jar_lines.append(StaticLine(space, [
                      (screen_size[0]*0.0390625, screen_size[1]), (screen_size[0]*0.1171875, screen_size[1])], 5))
@@ -244,7 +259,7 @@ def level_1(screen, screen_size):
     jar_lines.append(StaticLine(space, [(screen_size[0]*0.1171875, screen_size[1]),
                      (screen_size[0]*0.15625, screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
-    ball = Ball(space, (1200, 100), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (screen_size[0]*0.9, screen_size[1]*0.12), screen_size[1]*0.0555555555555556)
     # Testing Ball
     # ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
 
@@ -311,7 +326,7 @@ def level_1(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                end_world, thickness)
+                                 end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -378,8 +393,8 @@ def level_2(screen, screen_size):
     space = pymunk.Space()
     space.gravity = (0, 200)
 
-    draw_options = pymunk.pygame_util.DrawOptions(screen)
-    space.debug_draw(draw_options)
+    # draw_options = pymunk.pygame_util.DrawOptions(screen)
+    # space.debug_draw(draw_options)
 
     permanent_surface = pygame.Surface(screen.get_size())
     permanent_surface.fill("white")
@@ -400,12 +415,12 @@ def level_2(screen, screen_size):
     lines.append(StaticLine(space, [
                  (screen_size[0]*0.3, screen_size[1]*0.3), (screen_size[0]*0.7, screen_size[1]*0.3)], 10))
     # Limits
-    lines.append(StaticLine(space, [(0, 0), (0, screen_size[1])], 1))
+    lines.append(StaticLine(space, [(-500, 0), (-500, screen_size[1])], 1000))
     lines.append(StaticLine(
-        space, [(screen_size[0], 0), (screen_size[0], screen_size[1])], 1))
-    lines.append(StaticLine(space, [(0, 0), (screen_size[0], 0)], 1))
+        space, [(500+screen_size[0], 0), (500+screen_size[0], screen_size[1])], 1000))
+    lines.append(StaticLine(space, [(0, -500), (screen_size[0], -500)], 1000))
     lines.append(StaticLine(
-        space, [(0, screen_size[1]), (screen_size[0], screen_size[1])], 1))
+        space, [(0, 500+screen_size[1]), (screen_size[0], 500+screen_size[1])], 1000))
     # Jar
     jar_lines.append(StaticLine(space, [
                      (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*(0.574-0.1171875), screen_size[1])], 5))
@@ -415,9 +430,9 @@ def level_2(screen, screen_size):
                      (screen_size[0]*(0.574-0.15626), screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
     ball = Ball(space, (screen_size[0]*0.5,
-               screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
+                        screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    #ball = Ball(space, (640, 360), screen_size[1]*0.0555555555555556)
+    # ball = Ball(space, (640, 360), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -482,7 +497,7 @@ def level_2(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                end_world, thickness)
+                                 end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -490,7 +505,7 @@ def level_2(screen, screen_size):
             center=(center_x_count_live, center_y_count_live))
         screen.blit(box_surface_count_live, box_rect_count_live)
 
-        if ball.body.position[1] >= screen_size[1]*0.94 and (ball.body.position[0] <= screen_size[0]*(0.574-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.574-0.15626)):
+        if ball.body.position[1] <= screen_size[1] and ball.body.position[1] >= screen_size[1]*0.9 and (ball.body.position[0] <= screen_size[0]*(0.574-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.574-0.15626)):
             end = True
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
@@ -549,8 +564,8 @@ def level_3(screen, screen_size):
     space = pymunk.Space()
     space.gravity = (0, 200)
 
-    draw_options = pymunk.pygame_util.DrawOptions(screen)
-    space.debug_draw(draw_options)
+    # draw_options = pymunk.pygame_util.DrawOptions(screen)
+    # space.debug_draw(draw_options)
 
     permanent_surface = pygame.Surface(screen.get_size())
     permanent_surface.fill("white")
@@ -560,7 +575,8 @@ def level_3(screen, screen_size):
     drawing = False
     lines = []
     jar_lines = []
-    spring_lines = []
+    spring_lines_floor = []
+    spring_lines_wall = []
     thickness = 10
     y_scalable_constant = 175/720
     menu_condition = False
@@ -570,12 +586,26 @@ def level_3(screen, screen_size):
 
     # Black Lines
     lines.append(StaticLine(space, [
-                (0, screen_size[1]*0.3), (screen_size[0]*0.2045, screen_size[1]*0.3)], 10))
+                (0, screen_size[1]*0.25), (screen_size[0]*0.2045, screen_size[1]*0.25)], 10))
     lines.append(StaticLine(space, [
-                (screen_size[0]*0.2, screen_size[1]*0.3), (screen_size[0]*0.2, screen_size[1])], 10))
+                (screen_size[0]*0.2, screen_size[1]*0.25), (screen_size[0]*0.2, screen_size[1]*0.35)], 10))
+    lines.append(StaticLine(space, [
+                (0, screen_size[1]*0.35), (screen_size[0]*0.2045, screen_size[1]*0.35)], 10))
+    lines.append(StaticLine(space, [
+                (0, screen_size[1]*0.9), (screen_size[0]*0.2045, screen_size[1]*0.9)], 10))
+    lines.append(StaticLine(space, [
+                (screen_size[0]*0.2, screen_size[1]*0.9), (screen_size[0]*0.2, screen_size[1])], 10))
+    lines.append(StaticLine(space, [
+                (screen_size[0]*0.15, screen_size[1]*0.35), (0, screen_size[1]*0.6)], 10))
+    lines.append(StaticLine(space, [
+                (screen_size[0]*0.685, screen_size[1]*0.3), (screen_size[0]*0.685, screen_size[1])], 10))
+    lines.append(StaticLine(space, [
+                (screen_size[0]*0.6815, screen_size[1]*0.3), (screen_size[0], screen_size[1]*0.3)], 10))
     # Spring Lines
-    spring_lines.append(StaticLine(space, [
-                (screen_size[0]*0.4, screen_size[1]*0.99), (screen_size[0]*0.5, screen_size[1]*0.99)], 10))
+    spring_lines_floor.append(StaticLine(space, [
+        (screen_size[0]*0.4, screen_size[1]*0.99), (screen_size[0]*0.5, screen_size[1]*0.99)], 10))
+    spring_lines_wall.append(StaticLine(space, [
+        (screen_size[0]*0.678, screen_size[1]*0.5), (screen_size[0]*0.678, screen_size[1]*0.7)], 10))
     # Limits
     lines.append(StaticLine(space, [(0, 0), (0, screen_size[1])], 1))
     lines.append(StaticLine(
@@ -584,17 +614,16 @@ def level_3(screen, screen_size):
     lines.append(StaticLine(
         space, [(0, screen_size[1]), (screen_size[0], screen_size[1])], 1))
     # Jar
-    # jar_lines.append(StaticLine(space, [
-    #                  (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*(0.574-0.1171875), screen_size[1])], 5))
-    # jar_lines.append(StaticLine(space, [
-    #                  (screen_size[0]*(0.574-0.0390625), screen_size[1]), (screen_size[0]*0.574, screen_size[1]*y_scalable_constant*3)], 5))
-    # jar_lines.append(StaticLine(space, [(screen_size[0]*(0.574-0.1171875), screen_size[1]),
-    #                  (screen_size[0]*(0.574-0.15626), screen_size[1]*y_scalable_constant*3)], 5))
+    jar_lines.append(StaticLine(space, [
+                     (screen_size[0]*(0.18-0.0390625), screen_size[1]*0.89), (screen_size[0]*(0.18-0.1171875), screen_size[1]*0.89)], 5))
+    jar_lines.append(StaticLine(space, [
+                     (screen_size[0]*(0.18-0.0390625), screen_size[1]*0.89), (screen_size[0]*0.18, screen_size[1]*y_scalable_constant*3*0.89)], 5))
+    jar_lines.append(StaticLine(space, [(screen_size[0]*(0.18-0.1171875), screen_size[1]*0.89),
+                     (screen_size[0]*(0.18-0.15626), screen_size[1]*y_scalable_constant*3*0.89)], 5))
     # Ball
-    # ball = Ball(space, (screen_size[0]*0.5,
-    #           screen_size[1]*0.15), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (screen_size[0]*0.1, screen_size[1]*0.1), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    ball = Ball(space, (150, 200), screen_size[1]*0.0555555555555556)
+    # ball = Ball(space, (150, 100), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -649,6 +678,12 @@ def level_3(screen, screen_size):
         for line in jar_lines:
             line.jar_draw(screen)
 
+        for line in spring_lines_floor:
+            line.spring_draw_floor(screen)
+        
+        for line in spring_lines_wall:
+            line.spring_draw_wall(screen)
+
         if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
 
@@ -659,7 +694,7 @@ def level_3(screen, screen_size):
                 end_world = drawing.body.position + \
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
-                                end_world, thickness)
+                                 end_world, thickness)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -667,7 +702,7 @@ def level_3(screen, screen_size):
             center=(center_x_count_live, center_y_count_live))
         screen.blit(box_surface_count_live, box_rect_count_live)
 
-        if ball.body.position[1] >= screen_size[1]*0.94 and (ball.body.position[0] <= screen_size[0]*(0.574-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.574-0.15626)):
+        if (ball.body.position[1] >= screen_size[1]*0.7 and ball.body.position[1] <= screen_size[1]*0.9) and (ball.body.position[0] <= screen_size[0]*(0.18-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.18-0.15626)):
             end = True
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
@@ -679,8 +714,8 @@ def level_3(screen, screen_size):
             box_rect_count = box_surface_count.get_rect(
                 center=(center_x_count, center_y_count))
             screen.blit(box_surface_count, box_rect_count)
-            RestartButton.position = (screen_size[0]*0.35, screen_size[1]*0.58)
-            MenuButton.position = (screen_size[0]*0.6, screen_size[1]*0.58)
+            RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
+            MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
             RestartButton.draw(screen, buttons_font)
             MenuButton.draw(screen, buttons_font)
             RBPos = RestartButton.position
@@ -714,5 +749,44 @@ def level_3(screen, screen_size):
     return quit_condition
 
 
-def settings_menu(screen, screen_size):
-    screen.fill("red")
+def choose_resolution(screen, screen_size):
+    screen.fill("white")
+    change_res_font_size = int(screen_size[1] * 0.06)
+    change_res_font = pygame.font.SysFont("Calibri", change_res_font_size)
+    buttons_font_size = int(screen_size[1] * 0.05)
+    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+    # Change Resolution Button
+    ChangeResolutionButton = Button((screen_size[0]*0.38, screen_size[1]*0.8),
+                           (screen_size[0]*0.25, screen_size[1]*0.1), 1, "Aplicar Cambios")
+    ChangeResolutionButton.draw(screen, change_res_font)
+    # Resolution Title
+    resolution_font_size = int(screen_size[1] * 0.09)
+    resolution_font = pygame.font.SysFont("Calibri", resolution_font_size, bold=True)
+    resolution_surface = resolution_font.render("Resolución", True, [0, 0, 0])
+    resolution_rect = resolution_surface.get_rect(center=(screen_size[0]*0.5, screen_size[1]*0.1))
+    screen.blit(resolution_surface, resolution_rect) 
+    # Aspect Ratios Headings
+    ar_font_size = int(screen_size[1] * 0.05)
+    ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
+    ar_surface = ar_font.render("16:9", True, [0, 0, 0])
+    ar_rect = ar_surface.get_rect(center=(screen_size[0]*0.5, screen_size[1]*0.21))
+    screen.blit(ar_surface, ar_rect) 
+    # Resolution Buttons
+    Res1Button = Button((screen_size[0]*0.425, screen_size[1]*0.25),
+                           (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1080")
+    Res1Button.draw(screen, buttons_font)
+    Res2Button = Button((screen_size[0]*0.425, screen_size[1]*0.35),
+                           (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x720")
+    Res2Button.draw(screen, buttons_font)
+    ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
+    ar_surface = ar_font.render("16:10", True, [0, 0, 0])
+    ar_rect = ar_surface.get_rect(center=(screen_size[0]*0.5, screen_size[1]*0.48))
+    screen.blit(ar_surface, ar_rect) 
+    Res3Button = Button((screen_size[0]*0.425, screen_size[1]*0.52),
+                           (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1200")
+    Res3Button.draw(screen, buttons_font)
+    Res4Button = Button((screen_size[0]*0.425, screen_size[1]*0.62),
+                           (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x800")
+    Res4Button.draw(screen, buttons_font)
+    return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
+                
