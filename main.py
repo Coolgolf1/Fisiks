@@ -21,7 +21,6 @@ R4BPos = Res4Button.position
 R4BSize = Res4Button.size
 
 running = True
-quit_condition = False
 while running:
     pos = (0, 0)
     hover_pos = (0, 0)
@@ -48,6 +47,12 @@ while running:
 pygame.quit()
 
 pygame.init()
+
+pygame.mixer.init()
+pygame.mixer.music.load('.\\assets\\music.wav')
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.05)
+
 screen = pygame.display.set_mode((screen_size[0], screen_size[1]))
 
 f.print_screen(screen, screen_size)
@@ -70,29 +75,22 @@ quit_condition = False
 wait = False
 while running:
     pos = (0, 0)
-    hover_pos = (0, 0)
+    hover_pos = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONUP and not wait:
             pos = pygame.mouse.get_pos() 
         if event.type == pygame.MOUSEMOTION:
-            wait = False
-        # if event.type == pygame.MOUSEMOTION:
-        #     if event.type != pygame.MOUSEBUTTONUP and event.type != pygame.MOUSEBUTTONDOWN:
-        #         hover_pos = pygame.mouse.get_pos()
+            wait = False 
 
     # Update game state
     # Menu logic
 
-    # if (hover_pos[0] >= PBPos[0]) and (hover_pos[0] <= PBPos[0] + PBSize[0]) and (hover_pos[1] >= PBPos[1]) and (hover_pos[1] <= PBPos[1] + PBSize[1]) and not game and not settings:
-    #     pass
-    # elif (pos[0] >= SBPos[0]) and (pos[0] <= SBPos[0] + SBSize[0]) and (pos[1] >= SBPos[1]) and (pos[1] <= SBPos[1] + SBSize[1]) and not game and not settings:
-    #     pass
-    # elif (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]) and not game and not settings:
-    #     QBPos = QBPos*1.2
-    #     QBSize = QBSize*1.2
-
+    # if (pos[0] >= SBPos[0]) and (pos[0] <= SBPos[0] + SBSize[0]) and (pos[1] >= SBPos[1]) and (pos[1] <= SBPos[1] + SBSize[1]) and not game and not settings:
+    #     settings = True
+    if (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]) and not game and not settings:
+        running = False
     if (pos[0] >= PBPos[0]) and (pos[0] <= PBPos[0] + PBSize[0]) and (pos[1] >= PBPos[1]) and (pos[1] <= PBPos[1] + PBSize[1]):
         game = True
         Level1Button, Level2Button, Level3Button, BackButton = f.play_menu(
@@ -105,10 +103,6 @@ while running:
         L3BPos = Level3Button.position
         BBPos = BackButton.position
         BBSize = BackButton.size
-  
-                                                                                            
-    elif (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]):
-        running = False
     if game:
         if (pos[0] >= L1BPos[0]) and (pos[0] <= L1BPos[0] + L1BSize[0]) and (pos[1] >= L1BPos[1]) and (pos[1] <= L1BPos[1] + L1BSize[1]):
             quit_condition = f.level_1(screen, screen_size)
@@ -122,10 +116,14 @@ while running:
             f.print_screen(screen, screen_size)
             PlayButton, SettingsButton, QuitButton = f.main_menu(
                 screen, screen_size, joke_text)
+            game = False
         if quit_condition:
             running = False
-    elif settings:
-        pass
+    # if settings:
+    #     quit_condition = f.settings(screen, screen_size)
+    #     if quit_condition:
+    #         running = False
+    #     settings = False
         
 
     # Update the display

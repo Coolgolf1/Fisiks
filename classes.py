@@ -8,6 +8,8 @@ class Button:
         self.size = size
         self.outline_width = outline_width
         self.text = text
+        self.original_size = size
+        self.hovered = False 
 
     def draw(self, screen, font):
         pygame.draw.rect(screen, [0, 0, 0], [
@@ -19,6 +21,25 @@ class Button:
             self.position[0] + self.size[0] // 2, self.position[1] + self.size[1] // 2))
 
         screen.blit(text_surface, text_rect)
+
+    def draw_enlarged(self, screen, font, position: tuple, size: tuple):
+        pygame.draw.rect(screen, [0, 0, 0], [
+                         position[0], position[1], size[0], size[1]], self.outline_width)
+
+        text_surface = font.render(self.text, True, [0, 0, 0])
+
+        text_rect = text_surface.get_rect(center=(
+            position[0] + size[0] // 2, position[1] + size[1] // 2))
+
+        screen.blit(text_surface, text_rect)
+
+    def check_hover(self, mouse_pos):
+        x, y = self.position
+        w, h = self.size
+        if x <= mouse_pos[0] <= x + w and y <= mouse_pos[1] <= y + h:
+            self.hovered = True
+        else:
+            self.hovered = False
 
 
 class FreehandDrawing:
@@ -55,6 +76,7 @@ class StaticLine:
             self.body, points[0], points[1], self.thickness//2)
         self.line_shape.elasticity = 0.6
         self.line_shape.friction = 0.8
+        self.collision_type = 2
         space.add(self.body, self.line_shape)
 
     def draw(self, screen):
@@ -76,7 +98,7 @@ class StaticLine:
         pygame.draw.line(screen, "orange", start_pos, end_pos, self.thickness)
 
     def spring_draw_wall(self, screen):
-        self.line_shape.elasticity = 8
+        self.line_shape.elasticity = 7
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "red", start_pos, end_pos, self.thickness)
@@ -91,6 +113,7 @@ class Ball:
         self.shape = pymunk.Circle(self.body, self.radius)
         self.shape.elasticity = 1
         self.shape.friction = 0.2
+        self.collision_type = 1
         space.add(self.body, self.shape)
 
     def draw(self, screen):
@@ -102,3 +125,27 @@ class Ball:
                          (pos[0] + end_line.x, pos[1] + end_line.y), 2)
         pygame.draw.line(screen, "blue", pos,
                          (pos[0] - end_line.x, pos[1] - end_line.y), 2)
+        
+
+class Slider:
+    def __init__(self, x, y, w, h, min_val, max_val, initial_val):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.min_val = min_val
+        self.max_val = max_val
+        self.val = initial_val  
+        self.grabbed = False  
+
+    def draw(self, screen, screen_size):
+        pygame.draw.rect(screen, "black", self.rect)
+        handle_x = self.rect.x + (self.val / self.max_val) * self.rect.width
+        pygame.draw.rect(screen, "black", (handle_x - 5, self.rect.y, 10, self.rect.height))
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                self.grabbed = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            self.grabbed = False
+        elif event.type == pygame.MOUSEMOTION and self.grabbed:
+            self.val = min(max(0, event.pos[0] - self.rect.x), self.rect.width) / self.rect.width * self.max_val
+
