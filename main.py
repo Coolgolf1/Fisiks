@@ -2,7 +2,6 @@ import functions as f
 import pygame
 
 game = False
-settings = False
 
 pygame.init()
 screen_size = (1280, 720)
@@ -70,8 +69,8 @@ PBSize = PlayButton.size
 PBPos = PlayButton.position
 QBSize = QuitButton.size
 QBPos = QuitButton.position
-enlarged_font_size = int(screen_size[1] * 0.07)
-enlarged_font = pygame.font.SysFont("Calibri", enlarged_font_size)
+buttons_font_size = int(screen_size[1] * 0.06)
+buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
 
 # Game Loop
 joke = False
@@ -95,7 +94,7 @@ while running:
                     hover_changed = True
             wait = False 
 
-    if hover_changed and not game and not settings:
+    if hover_changed and not game:
         screen.fill("white")
         f.print_screen(screen, screen_size)
         f.draw_additional_ui_elements(screen, screen_size, joke_text)
@@ -108,15 +107,33 @@ while running:
 
         pygame.display.flip()
 
-
-    # if (pos[0] >= SBPos[0]) and (pos[0] <= SBPos[0] + SBSize[0]) and (pos[1] >= SBPos[1]) and (pos[1] <= SBPos[1] + SBSize[1]) and not game and not settings:
-    #     settings = True
-    if (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]) and not game and not settings:
+    if (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]) and not game:
         running = False
     if (pos[0] >= PBPos[0]) and (pos[0] <= PBPos[0] + PBSize[0]) and (pos[1] >= PBPos[1]) and (pos[1] <= PBPos[1] + PBSize[1]):
         game = True
+        screen.fill("white")
+        f.draw_play_menu_bg(screen, screen_size)  # Draw the play menu background
         Level1Button, Level2Button, Level3Button, BackButton = f.play_menu(
-            screen, screen_size)
+            screen, screen_size, buttons_font) 
+
+    if game:
+        hover_changed = False
+        # Update hover state for each button
+        for button in [Level1Button, Level2Button, Level3Button]:
+            if button.update_hover(pygame.mouse.get_pos()):
+                hover_changed = True
+
+        if hover_changed:
+            screen.fill("white")
+            f.draw_play_menu_bg(screen, screen_size)  # Draw the play menu background
+            for button in [Level1Button, Level2Button, Level3Button]:
+                if button.hovered:
+                    button.draw_enlarged(screen, buttons_font)
+                else:
+                    button.draw(screen, buttons_font)
+
+            pygame.display.flip()
+
         L1BSize = Level1Button.size
         L1BPos = Level1Button.position
         L2BSize = Level2Button.size
@@ -125,7 +142,7 @@ while running:
         L3BPos = Level3Button.position
         BBPos = BackButton.position
         BBSize = BackButton.size
-    if game:
+
         if (pos[0] >= L1BPos[0]) and (pos[0] <= L1BPos[0] + L1BSize[0]) and (pos[1] >= L1BPos[1]) and (pos[1] <= L1BPos[1] + L1BSize[1]):
             quit_condition = f.level_1(screen, screen_size)
         if (pos[0] >= L2BPos[0]) and (pos[0] <= L2BPos[0] + L2BSize[0]) and (pos[1] >= L2BPos[1]) and (pos[1] <= L2BPos[1] + L2BSize[1]):
@@ -141,11 +158,6 @@ while running:
             game = False
         if quit_condition:
             running = False
-    # if settings:
-    #     quit_condition = f.settings(screen, screen_size)
-    #     if quit_condition:
-    #         running = False
-    #     settings = False
         
     # Update the display
     pygame.display.flip()

@@ -147,6 +147,7 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke
         size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
     screen.blit(box_surface, box_rect)  # Right text in box
 
+
 def select_joke(screen_size: tuple):
     n = random.randint(0, 49)
     with open(".\\assets\\jokes.json", "r", encoding="utf-8") as f:
@@ -165,50 +166,50 @@ def select_joke(screen_size: tuple):
     return text
 
 
-def play_menu(screen: pygame.Surface, screen_size):
+def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.font):
+    # Create buttons
+    button_x1, button_x2, button_x3 = screen_size[0] * 0.17, screen_size[0] * 0.41, screen_size[0] * 0.65
+    button_width, button_height = int(screen_size[0] * 0.2), int(screen_size[1] * 0.1)
+
+    Level1Button = Button((button_x1, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 1")
+    Level2Button = Button((button_x2, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 2")
+    Level3Button = Button((button_x3, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 3")
+    BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01), (screen_size[1]*0.1, screen_size[0]*0.03), 2, "")
+
+    for button in [Level1Button, Level2Button, Level3Button]:
+        button.draw(screen, buttons_font)
+
+    return Level1Button, Level2Button, Level3Button, BackButton
+
+
+def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple):
     screen.fill("white")
-    button_x1 = screen_size[0] * 0.17
-    button_x2 = screen_size[0] * 0.41
-    button_x3 = screen_size[0] * 0.65
-    buttons_font_size = int(screen_size[1] * 0.08)
-    button_width = int(screen_size[0] * 0.2)
-    button_height = int(screen_size[1] * 0.1)
-    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+    title = "Niveles"
+    title_font_size = int(screen_size[1] * 0.1)
+    title_y = screen_size[1] * 0.1
+    title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
+    text_surface = title_font.render(title, True, [0, 0, 0])
+    text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
+    screen.blit(text_surface, text_rect)  # Title
+
     bg1 = pygame.image.load(".\\assets\\first_level.png")
     bg1 = pygame.transform.scale(bg1, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg1, (screen_size[0] * 0.17, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.17, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    Level1Button = Button((button_x1, screen_size[1]*0.6),
-                          (button_width, button_height), 2, "Nivel 1")
-    Level1Button.draw(screen, buttons_font)
     bg2 = pygame.image.load(".\\assets\\second_level.png")
     bg2 = pygame.transform.scale(bg2, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg2, (screen_size[0] * 0.41, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.41, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    Level2Button = Button((button_x2, screen_size[1]*0.6),
-                          (button_width, button_height), 2, "Nivel 2")
-    Level2Button.draw(screen, buttons_font)
     bg3 = pygame.image.load(".\\assets\\third_level.png")
     bg3 = pygame.transform.scale(bg3, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg3, (screen_size[0] * 0.65, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.65, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    Level3Button = Button((button_x3, screen_size[1]*0.6),
-                          (button_width, button_height), 2, "Nivel 3")
-    Level3Button.draw(screen, buttons_font)
-    BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01),
-                        (screen_size[1]*0.1, screen_size[0]*0.03), 2, "")
-    back_button_font_size = int(screen_size[1] * 0.04)
-    back_button_font = pygame.font.SysFont(
-        "Calibri", back_button_font_size, True)
     back = pygame.image.load(".\\assets\\home.png")
     back = pygame.transform.scale(back, (screen_size[0]*0.06, screen_size[1]*0.08))
     screen.blit(back, (0, 0))
-
-    return Level1Button, Level2Button, Level3Button, BackButton
-
 
 def buttons_in_game(screen_size):
     buttons_font_size_IG = int(screen_size[1] * 0.06)
@@ -429,7 +430,7 @@ def level_1(screen: pygame.Surface, screen_size):
                 elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
                     screen.fill("white")
                     running = False
-                    play_menu(screen, screen_size)
+                    play_menu(screen, screen_size, buttons_font)
                 elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
                     screen.fill("white")
                     running = False
@@ -443,7 +444,7 @@ def level_1(screen: pygame.Surface, screen_size):
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
-                play_menu(screen, screen_size)
+                play_menu(screen, screen_size, buttons_font)
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -608,7 +609,7 @@ def level_2(screen: pygame.Surface, screen_size):
                 elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
                     screen.fill("white")
                     running = False
-                    play_menu(screen, screen_size)
+                    play_menu(screen, screen_size, buttons_font)
                 elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
                     screen.fill("white")
                     running = False
@@ -622,7 +623,7 @@ def level_2(screen: pygame.Surface, screen_size):
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
-                play_menu(screen, screen_size)
+                play_menu(screen, screen_size, buttons_font)
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -820,7 +821,7 @@ def level_3(screen: pygame.Surface, screen_size):
                 elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
                     screen.fill("white")
                     running = False
-                    play_menu(screen, screen_size)
+                    play_menu(screen, screen_size, buttons_font)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -830,7 +831,7 @@ def level_3(screen: pygame.Surface, screen_size):
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
                 running = False
-                play_menu(screen, screen_size)
+                play_menu(screen, screen_size, buttons_font)
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -883,48 +884,3 @@ def choose_resolution(screen: pygame.Surface, screen_size):
                         (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x800")
     Res4Button.draw(screen, buttons_font)
     return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
-
-
-def ball_bounces(arbiter, space, data):
-    bounce_sound, spring_sound, jar_sound = load_sounds()
-    bounce_sound.play()
-    return True
-
-
-def ball_hits_spring(arbiter, space, data):
-    bounce_sound, spring_sound, jar_sound = load_sounds()
-    spring_sound.play()
-    return True
-
-
-def ball_hits_jar(arbiter, space, data):
-    bounce_sound, spring_sound, jar_sound = load_sounds()
-    jar_sound.play()
-    return True
-
-
-def load_sounds():
-    bounce_sound = pygame.mixer.Sound('.\\assets\\bounce.wav')
-    spring_sound = pygame.mixer.Sound('.\\assets\\spring.mp3')
-    jar_sound = pygame.mixer.Sound('.\\assets\\cup.mp3')
-    return bounce_sound, spring_sound, jar_sound
-
-
-def settings(screen, screen_size):
-    screen.fill("white")
-    volume_slider = Slider(100, 100, 200, 30, 0, 100, 50)
-    quit_condition = False
-    running = True
-    while running:
-        for event in pygame.event.get():
-            volume_slider.handle_event(event)
-            if event.type == pygame.QUIT:
-                running = False
-                quit_condition = True
-        
-        volume_slider.draw(screen, screen_size)
-
-        pygame.display.flip()
-
-    return quit_condition
-
