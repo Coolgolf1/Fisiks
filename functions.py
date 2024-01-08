@@ -715,15 +715,6 @@ def level_3(screen: pygame.Surface, screen_size):
     # Testing Ball
     # ball = Ball(space, (150, 100), screen_size[1]*0.0555555555555556)
 
-    # handler = space.add_collision_handler(Ball.collision_type, StaticLine.collision_type)
-    # handler.begin = ball_hits_spring
-
-    # jar_collision_handler = space.add_collision_handler(Ball.collision_type, Jar.collision_type)
-    # jar_collision_handler.begin = ball_hits_jar
-
-    # bounce_collision_handler = space.add_collision_handler(Ball.collision_type, Ball.collision_type)
-    # bounce_collision_handler.begin = ball_bounces
-
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
 
