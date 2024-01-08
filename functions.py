@@ -160,7 +160,7 @@ def select_joke(screen_size: tuple):
     text = ""
     aspect_ratio = screen_size[0] // screen_size[1]
     for i in raw_text:
-        if count == aspect_ratio*4:
+        if count == aspect_ratio*3:
             text += "%"
             count = 0
         text += i + " "
