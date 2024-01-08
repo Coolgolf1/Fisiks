@@ -10,7 +10,7 @@ class Button:
         self.outline_width = outline_width
         self.text = text
         self.original_size = size
-        self.hovered = False 
+        self.hovered = False
 
     def draw(self, screen, font):
         pygame.draw.rect(screen, self.colour, [
@@ -26,7 +26,7 @@ class Button:
     def is_hovered(self, mouse_pos):
         # Check if the mouse is over the button
         if (self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and
-            self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]):
+                self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]):
             if not self.hovered:  # Only change state if it was previously not hovered
                 self.hovered = True
                 return True
@@ -37,17 +37,20 @@ class Button:
     def draw_enlarged(self, screen, font):
         # Calculate the enlarged size
         enlargement_factor = 1.1
-        enlarged_size = (int(self.size[0] * enlargement_factor), int(self.size[1] * enlargement_factor))
+        enlarged_size = (
+            int(self.size[0] * enlargement_factor), int(self.size[1] * enlargement_factor))
         # Center the enlarged button on the original position
-        enlarged_position = (self.position[0] - (enlarged_size[0] - self.size[0]) // 2, 
+        enlarged_position = (self.position[0] - (enlarged_size[0] - self.size[0]) // 2,
                              self.position[1] - (enlarged_size[1] - self.size[1]) // 2)
 
         # Drawing the enlarged button
-        pygame.draw.rect(screen, [255, 255, 255], [*enlarged_position, *enlarged_size])
-        pygame.draw.rect(screen, self.colour, [*enlarged_position, *enlarged_size], self.outline_width)
+        pygame.draw.rect(screen, [255, 255, 255], [
+                         *enlarged_position, *enlarged_size])
+        pygame.draw.rect(screen, self.colour, [
+                         *enlarged_position, *enlarged_size], self.outline_width)
 
         text_surface = font.render(self.text, True, self.colour)
-        text_rect = text_surface.get_rect(center=(enlarged_position[0] + enlarged_size[0] // 2, 
+        text_rect = text_surface.get_rect(center=(enlarged_position[0] + enlarged_size[0] // 2,
                                                   enlarged_position[1] + enlarged_size[1] // 2))
         screen.blit(text_surface, text_rect)
 
@@ -55,9 +58,8 @@ class Button:
         """ Update the hover state and return True if the state changed. """
         previously_hovered = self.hovered
         self.hovered = self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and \
-                       self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]
-        return self.hovered != previously_hovered 
-
+            self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]
+        return self.hovered != previously_hovered
 
 
 class FreehandDrawing:
@@ -121,6 +123,7 @@ class StaticLine:
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "red", start_pos, end_pos, self.thickness)
 
+
 class Ball:
     def __init__(self, space, pos, radius):
         self.radius = radius
@@ -143,20 +146,21 @@ class Ball:
                          (pos[0] + end_line.x, pos[1] + end_line.y), 2)
         pygame.draw.line(screen, "blue", pos,
                          (pos[0] - end_line.x, pos[1] - end_line.y), 2)
-        
+
 
 class Slider:
     def __init__(self, x, y, w, h, min_val, max_val, initial_val):
         self.rect = pygame.Rect(x, y, w, h)
         self.min_val = min_val
         self.max_val = max_val
-        self.val = initial_val  
-        self.grabbed = False  
+        self.val = initial_val
+        self.grabbed = False
 
     def draw(self, screen, screen_size):
         pygame.draw.rect(screen, "black", self.rect)
         handle_x = self.rect.x + (self.val / self.max_val) * self.rect.width
-        pygame.draw.rect(screen, "black", (handle_x - 5, self.rect.y, 10, self.rect.height))
+        pygame.draw.rect(screen, "black", (handle_x - 5,
+                         self.rect.y, 10, self.rect.height))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -165,5 +169,5 @@ class Slider:
         elif event.type == pygame.MOUSEBUTTONUP:
             self.grabbed = False
         elif event.type == pygame.MOUSEMOTION and self.grabbed:
-            self.val = min(max(0, event.pos[0] - self.rect.x), self.rect.width) / self.rect.width * self.max_val
-
+            self.val = min(max(
+                0, event.pos[0] - self.rect.x), self.rect.width) / self.rect.width * self.max_val
