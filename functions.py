@@ -78,23 +78,23 @@ def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarg
                      box_x, box_y, box_width, box_height], 2)
 
     PlayButton = Button((button_x, play_button_y),
-                        (button_width, button_height), 2, "Jugar")
+                        (button_width, button_height), 2, "Jugar", "black")
     QuitButton = Button((button_x, quit_button_y),
-                        (button_width, button_height), 2, "Salir")
+                        (button_width, button_height), 2, "Salir", "black")
 
     if enlarge:
         if PlayButton.is_hovered(pygame.mouse.get_pos()):
-            PlayButton.draw_enlarged(screen, buttons_font, "black")
+            PlayButton.draw_enlarged(screen, buttons_font)
         else:
-            PlayButton.draw(screen, buttons_font, "black")
+            PlayButton.draw(screen, buttons_font)
 
         if QuitButton.is_hovered(pygame.mouse.get_pos()):
-            QuitButton.draw_enlarged(screen, buttons_font, "black")
+            QuitButton.draw_enlarged(screen, buttons_font)
         else:
-            QuitButton.draw(screen, buttons_font, "black")
+            QuitButton.draw(screen, buttons_font)
     else:
-        PlayButton.draw(screen, buttons_font, "black")
-        QuitButton.draw(screen, buttons_font, "black")
+        PlayButton.draw(screen, buttons_font)
+        QuitButton.draw(screen, buttons_font)
 
     return PlayButton, QuitButton
 
@@ -176,16 +176,16 @@ def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.f
         screen_size[0] * 0.2), int(screen_size[1] * 0.1)
 
     Level1Button = Button(
-        (button_x1, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 1")
+        (button_x1, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 1", "black")
     Level2Button = Button(
-        (button_x2, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 2")
+        (button_x2, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 2", "black")
     Level3Button = Button(
-        (button_x3, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 3")
+        (button_x3, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 3", "black")
     BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01),
-                        (screen_size[1]*0.1, screen_size[0]*0.03), 2, "")
+                        (screen_size[1]*0.1, screen_size[0]*0.03), 2, "", "black")
 
     for button in [Level1Button, Level2Button, Level3Button]:
-        button.draw(screen, buttons_font, "black")
+        button.draw(screen, buttons_font)
 
     return Level1Button, Level2Button, Level3Button, BackButton
 
@@ -227,12 +227,12 @@ def buttons_in_game(screen_size):
         "Calibri", buttons_font_size_IG, True)
     # Restart Button
     RestartButtonIG = Button((screen_size[0]*0.06, screen_size[1]*0.005),
-                             (screen_size[0]*0.05, screen_size[1]*0.05), 1, "R")
+                             (screen_size[0]*0.05, screen_size[1]*0.05), 1, "R", "black")
     RIGBPos = RestartButtonIG.position
     RIGBSize = RestartButtonIG.size
     # Menu Button
     MenuButtonIG = Button((screen_size[0]*0.005, screen_size[1]*0.005),
-                          (screen_size[0]*0.05, screen_size[1]*0.05), 1, "M")
+                          (screen_size[0]*0.05, screen_size[1]*0.05), 1, "M", "black")
     MIGBPos = MenuButtonIG.position
     MIGBSize = MenuButtonIG.size
     return buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize
@@ -271,13 +271,13 @@ def final_menu(screen_size):
     buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
     # Restart Button
     RestartButton = Button((screen_size[0]*0.27, screen_size[1]*0.58),
-                           (screen_size[0]*0.15, screen_size[1]*0.1), 1, "Reiniciar")
+                           (screen_size[0]*0.15, screen_size[1]*0.1), 1, "Reiniciar", "black")
     # Menu Button
     MenuButton = Button((screen_size[0]*0.45, screen_size[1]*0.58),
-                        (screen_size[0]*0.1, screen_size[1]*0.1), 1, "Menú")
+                        (screen_size[0]*0.1, screen_size[1]*0.1), 1, "Menú", "black")
     # Next Level Button
     NextLevelButton = Button((screen_size[0]*0.58, screen_size[1]*0.58),
-                             (screen_size[0]*0.15, screen_size[1]*0.1), 1, "Siguiente")
+                             (screen_size[0]*0.15, screen_size[1]*0.1), 1, "Siguiente", "black")
     return end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton
 
 
@@ -857,17 +857,17 @@ def level_3(screen: pygame.Surface, screen_size):
 def choose_resolution(screen_size):
     # Change Resolution Button
     ChangeResolutionButton = Button((screen_size[0]*0.38, screen_size[1]*0.8),
-                                    (screen_size[0]*0.25, screen_size[1]*0.1), 1, "Aplicar Cambios")
+                                    (screen_size[0]*0.25, screen_size[1]*0.1), 1, "Aplicar Cambios", "black")
     # Resolution Buttons
     Res1Button = Button((screen_size[0]*0.425, screen_size[1]*0.25),
-                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1080")
+                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1080", "black")
     Res2Button = Button((screen_size[0]*0.425, screen_size[1]*0.35),
-                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x720")
+                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x720", "black")
 
     Res3Button = Button((screen_size[0]*0.425, screen_size[1]*0.52),
-                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1200")
+                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1200", "black")
     Res4Button = Button((screen_size[0]*0.425, screen_size[1]*0.62),
-                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x800")
+                        (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x800", "black")
     return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
 
 
@@ -968,13 +968,24 @@ def choose_resolution_screen():
         # Handle resolution change logic
         if (pos[0] >= R1BPos[0]) and (pos[0] <= R1BPos[0] + R1BSize[0]) and (pos[1] >= R1BPos[1]) and (pos[1] <= R1BPos[1] + R1BSize[1]):
             screen_size_cr = (1920, 1080)
-
+            Res1Button.colour = "orange"
+            for button in [Res2Button, Res3Button, Res4Button]:
+                button.colour = "black"
         elif (pos[0] >= R2BPos[0]) and (pos[0] <= R2BPos[0] + R2BSize[0]) and (pos[1] >= R2BPos[1]) and (pos[1] <= R2BPos[1] + R2BSize[1]):
             screen_size_cr = (1280, 720)
+            Res2Button.colour = "orange"
+            for button in [Res1Button, Res3Button, Res4Button]:
+                button.colour = "black"
         elif (pos[0] >= R3BPos[0]) and (pos[0] <= R3BPos[0] + R3BSize[0]) and (pos[1] >= R3BPos[1]) and (pos[1] <= R3BPos[1] + R3BSize[1]):
             screen_size_cr = (1920, 1200)
+            Res3Button.colour = "orange"
+            for button in [Res1Button, Res2Button, Res4Button]:
+                button.colour = "black"
         elif (pos[0] >= R4BPos[0]) and (pos[0] <= R4BPos[0] + R4BSize[0]) and (pos[1] >= R4BPos[1]) and (pos[1] <= R4BPos[1] + R4BSize[1]):
             screen_size_cr = (1280, 800)
+            Res4Button.colour = "orange"
+            for button in [Res1Button, Res2Button, Res3Button]:
+                button.colour = "black"
         if (pos[0] >= CRBPos[0]) and (pos[0] <= CRBPos[0] + CRBSize[0]) and (pos[1] >= CRBPos[1]) and (pos[1] <= CRBPos[1] + CRBSize[1]):
             running = False
 

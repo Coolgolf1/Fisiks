@@ -66,9 +66,9 @@ if not quit_game:
 
             for button in [PlayButton, QuitButton]:
                 if button.hovered:
-                    button.draw_enlarged(screen, buttons_font, "black")
+                    button.draw_enlarged(screen, buttons_font)
                 else:
-                    button.draw(screen, buttons_font, "black")
+                    button.draw(screen, buttons_font)
 
             pygame.display.flip()
 
@@ -95,9 +95,9 @@ if not quit_game:
                 f.draw_play_menu_bg(screen, screen_size)
                 for button in [Level1Button, Level2Button, Level3Button]:
                     if button.hovered:
-                        button.draw_enlarged(screen, buttons_font, "black")
+                        button.draw_enlarged(screen, buttons_font)
                     else:
-                        button.draw(screen, buttons_font, "black")
+                        button.draw(screen, buttons_font)
 
                 pygame.display.flip()
 
