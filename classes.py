@@ -22,24 +22,40 @@ class Button:
 
         screen.blit(text_surface, text_rect)
 
-    def draw_enlarged(self, screen, font, position: tuple, size: tuple):
-        pygame.draw.rect(screen, [0, 0, 0], [
-                         position[0], position[1], size[0], size[1]], self.outline_width)
-
-        text_surface = font.render(self.text, True, [0, 0, 0])
-
-        text_rect = text_surface.get_rect(center=(
-            position[0] + size[0] // 2, position[1] + size[1] // 2))
-
-        screen.blit(text_surface, text_rect)
-
-    def check_hover(self, mouse_pos):
-        x, y = self.position
-        w, h = self.size
-        if x <= mouse_pos[0] <= x + w and y <= mouse_pos[1] <= y + h:
-            self.hovered = True
+    def is_hovered(self, mouse_pos):
+        # Check if the mouse is over the button
+        if (self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and
+            self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]):
+            if not self.hovered:  # Only change state if it was previously not hovered
+                self.hovered = True
+                return True
         else:
             self.hovered = False
+        return False
+
+    def draw_enlarged(self, screen, font):
+        # Calculate the enlarged size
+        enlargement_factor = 1.1
+        enlarged_size = (int(self.size[0] * enlargement_factor), int(self.size[1] * enlargement_factor))
+        # Center the enlarged button on the original position
+        enlarged_position = (self.position[0] - (enlarged_size[0] - self.size[0]) // 2, 
+                             self.position[1] - (enlarged_size[1] - self.size[1]) // 2)
+
+        # Drawing the enlarged button
+        pygame.draw.rect(screen, [255, 255, 255], [*enlarged_position, *enlarged_size])
+        pygame.draw.rect(screen, [0, 0, 0], [*enlarged_position, *enlarged_size], self.outline_width)
+
+        text_surface = font.render(self.text, True, [0, 0, 0])
+        text_rect = text_surface.get_rect(center=(enlarged_position[0] + enlarged_size[0] // 2, 
+                                                  enlarged_position[1] + enlarged_size[1] // 2))
+        screen.blit(text_surface, text_rect)
+
+    def update_hover(self, mouse_pos):
+        """ Update the hover state and return True if the state changed. """
+        previously_hovered = self.hovered
+        self.hovered = self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and \
+                       self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]
+        return self.hovered != previously_hovered 
 
 
 class FreehandDrawing:

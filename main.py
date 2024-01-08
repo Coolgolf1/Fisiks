@@ -23,7 +23,7 @@ R4BSize = Res4Button.size
 running = True
 while running:
     pos = (0, 0)
-    hover_pos = (0, 0)
+    hover_pos = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -55,37 +55,59 @@ pygame.mixer.music.set_volume(0.05)
 
 screen = pygame.display.set_mode((screen_size[0], screen_size[1]))
 
+
+buttons_font_size = int(screen_size[1] * 0.06)
+buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+
 f.print_screen(screen, screen_size)
 
 joke_text = f.select_joke(screen_size)
 
-PlayButton, SettingsButton, QuitButton = f.main_menu(
-    screen, screen_size, joke_text)
+enlarge = False
+PlayButton, QuitButton = f.main_menu(
+    screen, screen_size, joke_text, enlarge)
 PBSize = PlayButton.size
 PBPos = PlayButton.position
-SBSize = SettingsButton.size
-SBPos = SettingsButton.position
 QBSize = QuitButton.size
 QBPos = QuitButton.position
+enlarged_font_size = int(screen_size[1] * 0.07)
+enlarged_font = pygame.font.SysFont("Calibri", enlarged_font_size)
 
 # Game Loop
 joke = False
 running = True
 quit_condition = False
 wait = False
+running = True
 while running:
     pos = (0, 0)
+    hover_changed = False
     hover_pos = pygame.mouse.get_pos()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONUP and not wait:
             pos = pygame.mouse.get_pos() 
         if event.type == pygame.MOUSEMOTION:
+            for button in [PlayButton, QuitButton]:
+                if button.update_hover(hover_pos):
+                    hover_changed = True
             wait = False 
 
-    # Update game state
-    # Menu logic
+    if hover_changed and not game and not settings:
+        screen.fill("white")
+        f.print_screen(screen, screen_size)
+        f.draw_additional_ui_elements(screen, screen_size, joke_text)
+
+        for button in [PlayButton, QuitButton]:
+            if button.hovered:
+                button.draw_enlarged(screen, buttons_font)
+            else:
+                button.draw(screen, buttons_font)
+
+        pygame.display.flip()
+
 
     # if (pos[0] >= SBPos[0]) and (pos[0] <= SBPos[0] + SBSize[0]) and (pos[1] >= SBPos[1]) and (pos[1] <= SBPos[1] + SBSize[1]) and not game and not settings:
     #     settings = True
@@ -114,8 +136,8 @@ while running:
         if (pos[0] >= BBPos[0]) and (pos[0] <= BBPos[0] + BBSize[0]) and (pos[1] >= BBPos[1]) and (pos[1] <= BBPos[1] + BBSize[1]):
             screen.fill("white")
             f.print_screen(screen, screen_size)
-            PlayButton, SettingsButton, QuitButton = f.main_menu(
-                screen, screen_size, joke_text)
+            PlayButton, QuitButton = f.main_menu(
+                screen, screen_size, joke_text, enlarge)
             game = False
         if quit_condition:
             running = False
@@ -125,7 +147,6 @@ while running:
     #         running = False
     #     settings = False
         
-
     # Update the display
     pygame.display.flip()
 

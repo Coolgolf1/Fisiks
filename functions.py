@@ -7,14 +7,14 @@ import json
 import pymunk.pygame_util
 
 
-def print_screen(screen, screen_size: tuple):
+def print_screen(screen: pygame.Surface, screen_size: tuple):
     pygame.display.set_caption("Fisiks")
     bg = pygame.image.load(".\\assets\\background.png")
     bg = pygame.transform.scale(bg, (screen_size[0], screen_size[1]))
     screen.blit(bg, (0, 0))
 
 
-def main_menu(screen, screen_size: tuple, joke_text: str):
+def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarge: bool):
     """
     *************** Drawing Main Menu ***************
     """
@@ -28,7 +28,6 @@ def main_menu(screen, screen_size: tuple, joke_text: str):
     title_y = screen_size[1] * 0.1
     button_x = screen_size[0] * 0.05
     play_button_y = screen_size[1] * 0.42
-    settings_button_y = screen_size[1] * 0.5
     quit_button_y = screen_size[1] * 0.55
 
     title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
@@ -78,18 +77,75 @@ def main_menu(screen, screen_size: tuple, joke_text: str):
     pygame.draw.rect(screen, [0, 0, 0], [
                      box_x, box_y, box_width, box_height], 2)
 
-    PlayButton = Button((button_x, play_button_y),
-                        (button_width, button_height), 2, "Jugar")
-    PlayButton.draw(screen, buttons_font)
-    SettingsButton = Button((button_x, settings_button_y),
-                            (button_width, button_height), 2, "Ajustes")
-    # SettingsButton.draw(screen, buttons_font)
-    QuitButton = Button((button_x, quit_button_y),
-                        (button_width, button_height), 2, "Salir")
-    QuitButton.draw(screen, buttons_font)
+    PlayButton = Button((button_x, play_button_y), (button_width, button_height), 2, "Jugar")
+    QuitButton = Button((button_x, quit_button_y), (button_width, button_height), 2, "Salir")
 
-    return PlayButton, SettingsButton, QuitButton
+    if enlarge:
+        if PlayButton.is_hovered(pygame.mouse.get_pos()):
+            PlayButton.draw_enlarged(screen, buttons_font)
+        else:
+            PlayButton.draw(screen, buttons_font)
+        
+        if QuitButton.is_hovered(pygame.mouse.get_pos()):
+            QuitButton.draw_enlarged(screen, buttons_font)
+        else:
+            QuitButton.draw(screen, buttons_font)
+    else:
+        PlayButton.draw(screen, buttons_font)
+        QuitButton.draw(screen, buttons_font)
 
+    return PlayButton, QuitButton
+
+
+def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke_text: str):
+    title = "Fisiks"
+    title_font_size = int(screen_size[1] * 0.12)
+    title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
+    title_y = screen_size[1] * 0.1
+    text_surface = title_font.render(title, True, [0, 0, 0])
+
+    box_width = screen_size[0] * 0.28
+    box_height = screen_size[1] * 0.5
+    box_x = screen_size[0] * 0.7
+    box_y = screen_size[1] * 0.275
+
+    # Draw box on the right
+    pygame.draw.rect(screen, [0, 0, 0], [
+                     box_x, box_y, box_width, box_height], 2)
+
+    text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
+    screen.blit(text_surface, text_rect)  # Title
+
+    box_font_size = int(screen_size[1] * 0.04)
+    text_box_width = int(screen_size[0] * 0.10)
+    text_box_height = int(screen_size[1] * 0.2)
+
+    text_box_x = screen_size[0] * 0.8
+    text_box_y = screen_size[1] * 0.5
+
+    clean_text = ""
+    box_font = pygame.font.SysFont("Calibri", box_font_size)
+    question_count = 0
+    for i in joke_text:
+        if i == "?":
+            question_count += 1
+        if i == "%":
+            box_surface = box_font.render(clean_text, True, [0, 0, 0])
+            box_rect = box_surface.get_rect(
+                size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
+            screen.blit(box_surface, box_rect)  # Right text in box
+            text_box_y += screen_size[1]*0.05
+            clean_text = ""
+        if question_count == 2 and i == "?":
+            text_box_y += screen_size[1]*0.05
+            clean_text = ""
+        else:
+            if not i == "%":
+                clean_text += i
+    box_surface = box_font.render(clean_text, True, [0, 0, 0])
+    box_rect = box_surface.get_rect(
+        size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
+    screen.blit(box_surface, box_rect)  # Right text in box
 
 def select_joke(screen_size: tuple):
     n = random.randint(0, 49)
@@ -109,7 +165,7 @@ def select_joke(screen_size: tuple):
     return text
 
 
-def play_menu(screen, screen_size):
+def play_menu(screen: pygame.Surface, screen_size):
     screen.fill("white")
     button_x1 = screen_size[0] * 0.17
     button_x2 = screen_size[0] * 0.41
@@ -214,7 +270,7 @@ def final_menu(screen_size):
     return end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton
 
 
-def level_1(screen, screen_size):
+def level_1(screen: pygame.Surface, screen_size):
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -396,7 +452,7 @@ def level_1(screen, screen_size):
     return quit_condition
 
 
-def level_2(screen, screen_size):
+def level_2(screen: pygame.Surface, screen_size):
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -575,7 +631,7 @@ def level_2(screen, screen_size):
     return quit_condition
 
 
-def level_3(screen, screen_size):
+def level_3(screen: pygame.Surface, screen_size):
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -783,7 +839,7 @@ def level_3(screen, screen_size):
     return quit_condition
 
 
-def choose_resolution(screen, screen_size):
+def choose_resolution(screen: pygame.Surface, screen_size):
     screen.fill("white")
     change_res_font_size = int(screen_size[1] * 0.06)
     change_res_font = pygame.font.SysFont("Calibri", change_res_font_size)
