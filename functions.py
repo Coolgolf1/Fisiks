@@ -77,22 +77,24 @@ def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarg
     pygame.draw.rect(screen, [0, 0, 0], [
                      box_x, box_y, box_width, box_height], 2)
 
-    PlayButton = Button((button_x, play_button_y), (button_width, button_height), 2, "Jugar")
-    QuitButton = Button((button_x, quit_button_y), (button_width, button_height), 2, "Salir")
+    PlayButton = Button((button_x, play_button_y),
+                        (button_width, button_height), 2, "Jugar")
+    QuitButton = Button((button_x, quit_button_y),
+                        (button_width, button_height), 2, "Salir")
 
     if enlarge:
         if PlayButton.is_hovered(pygame.mouse.get_pos()):
-            PlayButton.draw_enlarged(screen, buttons_font)
+            PlayButton.draw_enlarged(screen, buttons_font, "black")
         else:
-            PlayButton.draw(screen, buttons_font)
-        
+            PlayButton.draw(screen, buttons_font, "black")
+
         if QuitButton.is_hovered(pygame.mouse.get_pos()):
-            QuitButton.draw_enlarged(screen, buttons_font)
+            QuitButton.draw_enlarged(screen, buttons_font, "black")
         else:
-            QuitButton.draw(screen, buttons_font)
+            QuitButton.draw(screen, buttons_font, "black")
     else:
-        PlayButton.draw(screen, buttons_font)
-        QuitButton.draw(screen, buttons_font)
+        PlayButton.draw(screen, buttons_font, "black")
+        QuitButton.draw(screen, buttons_font, "black")
 
     return PlayButton, QuitButton
 
@@ -168,16 +170,22 @@ def select_joke(screen_size: tuple):
 
 def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.font):
     # Create buttons
-    button_x1, button_x2, button_x3 = screen_size[0] * 0.17, screen_size[0] * 0.41, screen_size[0] * 0.65
-    button_width, button_height = int(screen_size[0] * 0.2), int(screen_size[1] * 0.1)
+    button_x1, button_x2, button_x3 = screen_size[0] * \
+        0.17, screen_size[0] * 0.41, screen_size[0] * 0.65
+    button_width, button_height = int(
+        screen_size[0] * 0.2), int(screen_size[1] * 0.1)
 
-    Level1Button = Button((button_x1, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 1")
-    Level2Button = Button((button_x2, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 2")
-    Level3Button = Button((button_x3, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 3")
-    BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01), (screen_size[1]*0.1, screen_size[0]*0.03), 2, "")
+    Level1Button = Button(
+        (button_x1, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 1")
+    Level2Button = Button(
+        (button_x2, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 2")
+    Level3Button = Button(
+        (button_x3, screen_size[1]*0.6), (button_width, button_height), 2, "Nivel 3")
+    BackButton = Button((screen_size[0]*0.01, screen_size[1]*0.01),
+                        (screen_size[1]*0.1, screen_size[0]*0.03), 2, "")
 
     for button in [Level1Button, Level2Button, Level3Button]:
-        button.draw(screen, buttons_font)
+        button.draw(screen, buttons_font, "black")
 
     return Level1Button, Level2Button, Level3Button, BackButton
 
@@ -208,8 +216,10 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple):
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.65, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
     back = pygame.image.load(".\\assets\\home.png")
-    back = pygame.transform.scale(back, (screen_size[0]*0.06, screen_size[1]*0.08))
+    back = pygame.transform.scale(
+        back, (screen_size[0]*0.06, screen_size[1]*0.08))
     screen.blit(back, (0, 0))
+
 
 def buttons_in_game(screen_size):
     buttons_font_size_IG = int(screen_size[1] * 0.06)
@@ -333,10 +343,12 @@ def level_1(screen: pygame.Surface, screen_size):
         screen_size)
 
     restart = pygame.image.load(".\\assets\\reset.png")
-    restart = pygame.transform.scale(restart, (screen_size[0]*0.05, screen_size[1]*0.05))
+    restart = pygame.transform.scale(
+        restart, (screen_size[0]*0.05, screen_size[1]*0.05))
     permanent_surface.blit(restart, (76, 3))
     menu = pygame.image.load(".\\assets\\menu.png")
-    menu = pygame.transform.scale(menu, (screen_size[0]*0.06, screen_size[1]*0.06))
+    menu = pygame.transform.scale(
+        menu, (screen_size[0]*0.06, screen_size[1]*0.06))
     permanent_surface.blit(menu, (0, 0))
 
     running = True
@@ -507,14 +519,15 @@ def level_2(screen: pygame.Surface, screen_size):
 
     buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
         screen_size)
-    
+
     restart = pygame.image.load(".\\assets\\reset.png")
-    restart = pygame.transform.scale(restart, (screen_size[0]*0.05, screen_size[1]*0.05))
+    restart = pygame.transform.scale(
+        restart, (screen_size[0]*0.05, screen_size[1]*0.05))
     permanent_surface.blit(restart, (76, 3))
     menu = pygame.image.load(".\\assets\\menu.png")
-    menu = pygame.transform.scale(menu, (screen_size[0]*0.06, screen_size[1]*0.06))
+    menu = pygame.transform.scale(
+        menu, (screen_size[0]*0.06, screen_size[1]*0.06))
     permanent_surface.blit(menu, (0, 0))
-
 
     running = True
     while running:
@@ -716,14 +729,15 @@ def level_3(screen: pygame.Surface, screen_size):
 
     buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
         screen_size)
-    
+
     restart = pygame.image.load(".\\assets\\reset.png")
-    restart = pygame.transform.scale(restart, (screen_size[0]*0.05, screen_size[1]*0.05))
+    restart = pygame.transform.scale(
+        restart, (screen_size[0]*0.05, screen_size[1]*0.05))
     permanent_surface.blit(restart, (76, 3))
     menu = pygame.image.load(".\\assets\\menu.png")
-    menu = pygame.transform.scale(menu, (screen_size[0]*0.06, screen_size[1]*0.06))
+    menu = pygame.transform.scale(
+        menu, (screen_size[0]*0.06, screen_size[1]*0.06))
     permanent_surface.blit(menu, (0, 0))
-
 
     running = True
     while running:
@@ -807,8 +821,8 @@ def level_3(screen: pygame.Surface, screen_size):
             screen.blit(box_surface_count, box_rect_count)
             RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
             MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
+            RestartButton.draw(screen, buttons_font, "black")
+            MenuButton.draw(screen, buttons_font, "black")
             RBPos = RestartButton.position
             RBSize = RestartButton.size
             MBPos = MenuButton.position
@@ -840,47 +854,130 @@ def level_3(screen: pygame.Surface, screen_size):
     return quit_condition
 
 
-def choose_resolution(screen: pygame.Surface, screen_size):
-    screen.fill("white")
-    change_res_font_size = int(screen_size[1] * 0.06)
-    change_res_font = pygame.font.SysFont("Calibri", change_res_font_size)
-    buttons_font_size = int(screen_size[1] * 0.05)
-    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+def choose_resolution(screen_size):
     # Change Resolution Button
     ChangeResolutionButton = Button((screen_size[0]*0.38, screen_size[1]*0.8),
                                     (screen_size[0]*0.25, screen_size[1]*0.1), 1, "Aplicar Cambios")
-    ChangeResolutionButton.draw(screen, change_res_font)
-    # Resolution Title
-    resolution_font_size = int(screen_size[1] * 0.09)
-    resolution_font = pygame.font.SysFont(
-        "Calibri", resolution_font_size, bold=True)
-    resolution_surface = resolution_font.render("Resolución", True, [0, 0, 0])
-    resolution_rect = resolution_surface.get_rect(
-        center=(screen_size[0]*0.5, screen_size[1]*0.1))
-    screen.blit(resolution_surface, resolution_rect)
-    # Aspect Ratios Headings
-    ar_font_size = int(screen_size[1] * 0.05)
-    ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
-    ar_surface = ar_font.render("16:9", True, [0, 0, 0])
-    ar_rect = ar_surface.get_rect(
-        center=(screen_size[0]*0.5, screen_size[1]*0.21))
-    screen.blit(ar_surface, ar_rect)
     # Resolution Buttons
     Res1Button = Button((screen_size[0]*0.425, screen_size[1]*0.25),
                         (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1080")
-    Res1Button.draw(screen, buttons_font)
     Res2Button = Button((screen_size[0]*0.425, screen_size[1]*0.35),
                         (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x720")
-    Res2Button.draw(screen, buttons_font)
-    ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
-    ar_surface = ar_font.render("16:10", True, [0, 0, 0])
-    ar_rect = ar_surface.get_rect(
-        center=(screen_size[0]*0.5, screen_size[1]*0.48))
-    screen.blit(ar_surface, ar_rect)
+
     Res3Button = Button((screen_size[0]*0.425, screen_size[1]*0.52),
                         (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1920x1200")
-    Res3Button.draw(screen, buttons_font)
     Res4Button = Button((screen_size[0]*0.425, screen_size[1]*0.62),
                         (screen_size[0]*0.15, screen_size[1]*0.08), 1, "1280x800")
-    Res4Button.draw(screen, buttons_font)
     return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
+
+
+def choose_resolution_screen():
+    screen_size_cr = (1280, 720)
+    screen_size = screen_size_cr
+    screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))
+    screen.fill("white")
+    ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button = choose_resolution(
+        screen_size_cr)
+    CRBPos = ChangeResolutionButton.position
+    CRBSize = ChangeResolutionButton.size
+    R1BPos = Res1Button.position
+    R1BSize = Res1Button.size
+    R2BPos = Res2Button.position
+    R2BSize = Res2Button.size
+    R3BPos = Res3Button.position
+    R3BSize = Res3Button.size
+    R4BPos = Res4Button.position
+    R4BSize = Res4Button.size
+
+    change_res_font_size = int(screen_size_cr[1] * 0.06)
+    change_res_font = pygame.font.SysFont("Calibri", change_res_font_size)
+    buttons_font_size = int(screen_size_cr[1] * 0.05)
+    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+
+    quit_game = False
+    running = True
+    while running:
+        pos = (0, 0)
+        hover_pos = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                quit_game = True
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if ChangeResolutionButton.is_hovered(event.pos):
+                    ChangeResolutionButton.draw_enlarged(
+                        screen, change_res_font)
+                elif Res1Button.is_hovered(event.pos):
+                    Res1Button.draw_enlarged(screen, buttons_font)
+                elif Res2Button.is_hovered(event.pos):
+                    Res2Button.draw_enlarged(screen, buttons_font)
+                elif Res3Button.is_hovered(event.pos):
+                    Res3Button.draw_enlarged(screen, buttons_font)
+                elif Res4Button.is_hovered(event.pos):
+                    Res4Button.draw_enlarged(screen, buttons_font)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+            elif event.type == pygame.MOUSEMOTION:
+                for button in [ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button]:
+                    if button.update_hover(hover_pos):
+                        hover_changed = True
+
+        screen.fill("white")
+        resolution_font_size = int(screen_size[1] * 0.09)
+        resolution_font = pygame.font.SysFont(
+            "Calibri", resolution_font_size, bold=True)
+        resolution_surface = resolution_font.render(
+            "Resolución", True, [0, 0, 0])
+        resolution_rect = resolution_surface.get_rect(
+            center=(screen_size[0]*0.5, screen_size[1]*0.1))
+        screen.blit(resolution_surface, resolution_rect)
+        ar_font_size = int(screen_size[1] * 0.05)
+        ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
+        ar_surface = ar_font.render("16:9", True, [0, 0, 0])
+        ar_rect = ar_surface.get_rect(
+            center=(screen_size[0]*0.5, screen_size[1]*0.21))
+        screen.blit(ar_surface, ar_rect)
+        ar_font = pygame.font.SysFont("Calibri", ar_font_size, bold=True)
+        ar_surface = ar_font.render("16:10", True, [0, 0, 0])
+        ar_rect = ar_surface.get_rect(
+            center=(screen_size[0]*0.5, screen_size[1]*0.48))
+        screen.blit(ar_surface, ar_rect)
+        if not ChangeResolutionButton.hovered:
+            ChangeResolutionButton.draw(screen, change_res_font)
+        else:
+            ChangeResolutionButton.draw_enlarged(
+                screen, change_res_font)
+        if not Res1Button.hovered:
+            Res1Button.draw(screen, buttons_font)
+        else:
+            Res1Button.draw_enlarged(screen, buttons_font)
+        if not Res2Button.hovered:
+            Res2Button.draw(screen, buttons_font)
+        else:
+            Res2Button.draw_enlarged(screen, buttons_font)
+        if not Res3Button.hovered:
+            Res3Button.draw(screen, buttons_font)
+        else:
+            Res3Button.draw_enlarged(screen, buttons_font)
+        if not Res4Button.hovered:
+            Res4Button.draw(screen, buttons_font)
+        else:
+            Res4Button.draw_enlarged(screen, buttons_font)
+
+        # Handle resolution change logic
+        if (pos[0] >= R1BPos[0]) and (pos[0] <= R1BPos[0] + R1BSize[0]) and (pos[1] >= R1BPos[1]) and (pos[1] <= R1BPos[1] + R1BSize[1]):
+            screen_size_cr = (1920, 1080)
+
+        elif (pos[0] >= R2BPos[0]) and (pos[0] <= R2BPos[0] + R2BSize[0]) and (pos[1] >= R2BPos[1]) and (pos[1] <= R2BPos[1] + R2BSize[1]):
+            screen_size_cr = (1280, 720)
+        elif (pos[0] >= R3BPos[0]) and (pos[0] <= R3BPos[0] + R3BSize[0]) and (pos[1] >= R3BPos[1]) and (pos[1] <= R3BPos[1] + R3BSize[1]):
+            screen_size_cr = (1920, 1200)
+        elif (pos[0] >= R4BPos[0]) and (pos[0] <= R4BPos[0] + R4BSize[0]) and (pos[1] >= R4BPos[1]) and (pos[1] <= R4BPos[1] + R4BSize[1]):
+            screen_size_cr = (1280, 800)
+        if (pos[0] >= CRBPos[0]) and (pos[0] <= CRBPos[0] + CRBSize[0]) and (pos[1] >= CRBPos[1]) and (pos[1] <= CRBPos[1] + CRBSize[1]):
+            running = False
+
+        pygame.display.flip()
+
+    return quit_game, screen_size

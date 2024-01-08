@@ -3,7 +3,8 @@ import pymunk
 
 
 class Button:
-    def __init__(self, position: tuple, size: tuple, outline_width: int, text: str):
+    def __init__(self, position: tuple, size: tuple, outline_width: int, text: str, colour: str):
+        self.colour = colour
         self.position = position
         self.size = size
         self.outline_width = outline_width
@@ -12,10 +13,10 @@ class Button:
         self.hovered = False 
 
     def draw(self, screen, font):
-        pygame.draw.rect(screen, [0, 0, 0], [
+        pygame.draw.rect(screen, self.colour, [
                          self.position[0], self.position[1], self.size[0], self.size[1]], self.outline_width)
 
-        text_surface = font.render(self.text, True, [0, 0, 0])
+        text_surface = font.render(self.text, True, self.colour)
 
         text_rect = text_surface.get_rect(center=(
             self.position[0] + self.size[0] // 2, self.position[1] + self.size[1] // 2))
@@ -43,9 +44,9 @@ class Button:
 
         # Drawing the enlarged button
         pygame.draw.rect(screen, [255, 255, 255], [*enlarged_position, *enlarged_size])
-        pygame.draw.rect(screen, [0, 0, 0], [*enlarged_position, *enlarged_size], self.outline_width)
+        pygame.draw.rect(screen, self.colour, [*enlarged_position, *enlarged_size], self.outline_width)
 
-        text_surface = font.render(self.text, True, [0, 0, 0])
+        text_surface = font.render(self.text, True, self.colour)
         text_rect = text_surface.get_rect(center=(enlarged_position[0] + enlarged_size[0] // 2, 
                                                   enlarged_position[1] + enlarged_size[1] // 2))
         screen.blit(text_surface, text_rect)
@@ -56,6 +57,7 @@ class Button:
         self.hovered = self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and \
                        self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]
         return self.hovered != previously_hovered 
+
 
 
 class FreehandDrawing:
