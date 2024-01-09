@@ -131,7 +131,7 @@ def display_joke(screen: pygame.Surface, screen_size: tuple, joke_text: str, y_c
             clean_text = ""
             current_length = 0
             clean_text += word + " "
-            current_length += len(word)
+            current_length += len(word) + 1
             y += screen_size[1]*0.035
     if clean_text.strip() != "":
         text_surface = text_font.render(clean_text, True, [0, 0, 0])
@@ -328,7 +328,7 @@ def level_1(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (76, 3))
+    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -506,7 +506,7 @@ def level_2(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (76, 3))
+    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -707,7 +707,7 @@ def level_3(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (76, 3))
+    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -965,4 +965,4 @@ def choose_resolution_screen():
 
         pygame.display.flip()
 
-    return quit_game, screen_size
+    return quit_game, screen_size_cr

@@ -3,7 +3,6 @@ import pygame
 
 game = False
 quit_game = False
-screen_size = (1280, 720)
 
 pygame.init()
 quit_game, screen_size = f.choose_resolution_screen()
