@@ -1,5 +1,4 @@
 import pygame
-import numpy as np
 import pymunk
 from classes import *
 import random
@@ -124,7 +123,7 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple[int, 
 
 
 def select_joke() -> str:
-    """Elige un chiste aleatorio del json.
+    """Elige un chiste aleatorio del json. Tiene dentro un error handling por si hay algún error con el json.
 
     Returns:
         str: Devuelve el chiste elegido en forma de string.
@@ -179,7 +178,7 @@ def wrap_text(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: s
 
 
 def select_tip():
-    """"Elige un truco aleatorio del json.
+    """"Elige un truco aleatorio del json. Tiene dentro un error handling por si hay algún error con el json.
 
     Returns:
         str: Devuelve el truco elegido en forma de string.
