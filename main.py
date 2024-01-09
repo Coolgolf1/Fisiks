@@ -138,6 +138,7 @@ if not quit_game:
                 PlayButton, QuitButton = f.main_menu(
                     screen, screen_size, enlarge)
                 joke_text = f.select_joke()
+                text = f.select_tip()
                 f.draw_additional_ui_elements(
                     screen, screen_size, joke_text, text)
                 game = False
