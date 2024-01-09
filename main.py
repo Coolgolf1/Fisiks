@@ -2,10 +2,13 @@ import functions as f
 import pygame
 
 game = False
+quit_game = False
+screen_size = (1280, 720)
 
 pygame.init()
 quit_game, screen_size = f.choose_resolution_screen()
 pygame.quit()
+
 
 if not quit_game:
     pygame.init()
@@ -22,17 +25,31 @@ if not quit_game:
 
     f.print_screen(screen, screen_size)
 
-    joke_text = f.select_joke(screen_size)
+    box_font_size = int(screen_size[1] * 0.04)
+    box_font = pygame.font.SysFont("Calibri", box_font_size)
+    text_box_width = int(screen_size[0] * 0.10)
+    text_box_height = int(screen_size[1] * 0.2)
+
+    text_box_x = screen_size[0] * 0.8
+    text_box_y = screen_size[1] * 0.5
+
+    joke_text = f.select_joke()
+    text = f.select_tip()
+    
 
     enlarge = False
     PlayButton, QuitButton = f.main_menu(
-        screen, screen_size, joke_text, enlarge)
+        screen, screen_size, enlarge)
+    f.draw_additional_ui_elements(screen, screen_size, joke_text, text)
     PBSize = PlayButton.size
     PBPos = PlayButton.position
     QBSize = QuitButton.size
     QBPos = QuitButton.position
     buttons_font_size = int(screen_size[1] * 0.06)
     buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+
+    f.display_joke(screen, screen_size, joke_text, 0.56)
+    f.print_tips(screen, screen_size, text)
 
     # Game Loop
     joke = False
@@ -62,7 +79,7 @@ if not quit_game:
         if hover_changed and not game:
             screen.fill("white")
             f.print_screen(screen, screen_size)
-            f.draw_additional_ui_elements(screen, screen_size, joke_text)
+            f.draw_additional_ui_elements(screen, screen_size, joke_text, text)
 
             for button in [PlayButton, QuitButton]:
                 if button.hovered:
@@ -121,7 +138,9 @@ if not quit_game:
                 screen.fill("white")
                 f.print_screen(screen, screen_size)
                 PlayButton, QuitButton = f.main_menu(
-                    screen, screen_size, joke_text, enlarge)
+                    screen, screen_size, enlarge)
+                joke_text = f.select_joke()
+                f.draw_additional_ui_elements(screen, screen_size, joke_text, text)
                 game = False
             if quit_condition:
                 running = False

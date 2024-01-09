@@ -5,6 +5,7 @@ from classes import *
 import random
 import json
 import pymunk.pygame_util
+import textwrap
 
 
 def print_screen(screen: pygame.Surface, screen_size: tuple):
@@ -14,7 +15,7 @@ def print_screen(screen: pygame.Surface, screen_size: tuple):
     screen.blit(bg, (0, 0))
 
 
-def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarge: bool):
+def main_menu(screen: pygame.Surface, screen_size: tuple, enlarge: bool):
     """
     *************** Drawing Main Menu ***************
     """
@@ -36,37 +37,6 @@ def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarg
 
     text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
-
-    box_font_size = int(screen_size[1] * 0.04)
-    text_box_width = int(screen_size[0] * 0.10)
-    text_box_height = int(screen_size[1] * 0.2)
-
-    text_box_x = screen_size[0] * 0.8
-    text_box_y = screen_size[1] * 0.5
-
-    clean_text = ""
-    box_font = pygame.font.SysFont("Calibri", box_font_size)
-    question_count = 0
-    for i in joke_text:
-        if i == "?":
-            question_count += 1
-        if i == "%":
-            box_surface = box_font.render(clean_text, True, [0, 0, 0])
-            box_rect = box_surface.get_rect(
-                size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
-            screen.blit(box_surface, box_rect)  # Right text in box
-            text_box_y += screen_size[1]*0.05
-            clean_text = ""
-        if question_count == 2 and i == "?":
-            text_box_y += screen_size[1]*0.05
-            clean_text = ""
-        else:
-            if not i == "%":
-                clean_text += i
-    box_surface = box_font.render(clean_text, True, [0, 0, 0])
-    box_rect = box_surface.get_rect(
-        size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
-    screen.blit(box_surface, box_rect)  # Right text in box
 
     box_width = screen_size[0] * 0.28
     box_height = screen_size[1] * 0.5
@@ -99,7 +69,7 @@ def main_menu(screen: pygame.Surface, screen_size: tuple, joke_text: str, enlarg
     return PlayButton, QuitButton
 
 
-def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke_text: str):
+def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke_text: str, text: str):
     title = "Fisiks"
     title_font_size = int(screen_size[1] * 0.12)
     title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
@@ -118,54 +88,67 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke
     text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
-    box_font_size = int(screen_size[1] * 0.04)
-    text_box_width = int(screen_size[0] * 0.10)
-    text_box_height = int(screen_size[1] * 0.2)
-
-    text_box_x = screen_size[0] * 0.8
-    text_box_y = screen_size[1] * 0.5
-
-    clean_text = ""
-    box_font = pygame.font.SysFont("Calibri", box_font_size)
-    question_count = 0
-    for i in joke_text:
-        if i == "?":
-            question_count += 1
-        if i == "%":
-            box_surface = box_font.render(clean_text, True, [0, 0, 0])
-            box_rect = box_surface.get_rect(
-                size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
-            screen.blit(box_surface, box_rect)  # Right text in box
-            text_box_y += screen_size[1]*0.05
-            clean_text = ""
-        if question_count == 2 and i == "?":
-            text_box_y += screen_size[1]*0.05
-            clean_text = ""
-        else:
-            if not i == "%":
-                clean_text += i
-    box_surface = box_font.render(clean_text, True, [0, 0, 0])
-    box_rect = box_surface.get_rect(
-        size=(text_box_width, text_box_height), center=(text_box_x, text_box_y))
-    screen.blit(box_surface, box_rect)  # Right text in box
+    title_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.025), True)
+    title_surface = title_font.render("Chiste", True, [0, 0, 0])
+    title_rect = title_surface.get_rect(topleft=(screen_size[0]*(905/1280), screen_size[1]*(370/720)))
+    screen.blit(title_surface, title_rect) 
+    display_joke(screen, screen_size, joke_text, 0.56)
+    title_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.025), True)
+    title_surface = title_font.render("Truco", True, [0, 0, 0])
+    title_rect = title_surface.get_rect(topleft=(screen_size[0]*(905/1280), screen_size[1]*(210/720)))
+    screen.blit(title_surface, title_rect) 
+    print_tips(screen, screen_size, text)
 
 
-def select_joke(screen_size: tuple):
-    n = random.randint(0, 49)
-    with open(".\\assets\\jokes.json", "r", encoding="utf-8") as f:
+def select_joke():
+    with open(".\\assets\\jokes.json", "r", encoding='utf-8') as f:
         data = json.load(f)
-    raw_text = data[n]['joke']
-    raw_text = raw_text.split(' ')
-    count = 0
-    text = ""
-    aspect_ratio = screen_size[0] // screen_size[1]
-    for i in raw_text:
-        if count == aspect_ratio*3:
-            text += "%"
-            count = 0
-        text += i + " "
-        count += 1
-    return text
+    n = random.randint(0, 49)
+    return data['jokes'][n]['joke']
+
+
+def display_joke(screen: pygame.Surface, screen_size: tuple, joke_text: str, y_constant: float):
+
+
+    text_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.02))
+
+    max_length = 30
+    x = screen_size[0]*0.70703125
+    y = screen_size[1]*y_constant
+    clean_text = ""
+    current_length = 0
+    words = joke_text.split(" ")
+
+    for word in words:
+        current_length += len(word)
+        if current_length <= (max_length) + 1:
+            clean_text += word + " "
+            current_length += 1
+        else:
+            text_surface = text_font.render(clean_text, True, [0, 0, 0])
+            text_rect = text_surface.get_rect(topleft=(x, y))
+            screen.blit(text_surface, text_rect) 
+            clean_text = ""
+            current_length = 0
+            clean_text += word + " "
+            current_length += len(word)
+            y += screen_size[1]*0.035
+    if clean_text.strip() != "":
+        text_surface = text_font.render(clean_text, True, [0, 0, 0])
+        text_rect = text_surface.get_rect(topleft=(x, y))
+        screen.blit(text_surface, text_rect)
+
+
+def select_tip():
+    with open(".\\assets\\tips.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
+    n = random.randint(0, 3)
+    return data['tips'][n]['tip']
+
+
+def print_tips(screen: pygame.Surface, screen_size: tuple, text: str):
+    y_constant = 0.333
+    display_joke(screen, screen_size, text, y_constant)
 
 
 def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.font):
@@ -221,7 +204,7 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple):
     screen.blit(back, (0, 0))
 
 
-def buttons_in_game(screen_size):
+def buttons_in_game(screen_size: tuple):
     buttons_font_size_IG = int(screen_size[1] * 0.06)
     buttons_font_IG = pygame.font.SysFont(
         "Calibri", buttons_font_size_IG, True)

@@ -1,0 +1,8 @@
+{
+    "tips": [
+        {"id": 1, "tip": "Si ves unas barras naranjas y rojas, son muelles débiles y fuertes respectivamente."},
+        {"id": 2, "tip": "Piensa 'out of the box', no hay una sola forma de completar un nivel."},
+        {"id": 3, "tip": "Intenta completar el juego con el menor número de líneas dibujadas para aumentar la dificultad."},
+        {"id": 4, "tip": "Recuerda: el vaso no hace rebotar la bola, así que no tengas miedo a lanzarla con fuerza."}
+    ]
+  }
