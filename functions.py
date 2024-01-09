@@ -5,19 +5,30 @@ from classes import *
 import random
 import json
 import pymunk.pygame_util
-import textwrap
 
 
-def print_screen(screen: pygame.Surface, screen_size: tuple):
+def print_screen(screen: pygame.Surface, screen_size: tuple[int, int]):
+    """Muestra en pantalla el fondo del menú principal y lo ajusta para el tamaño de la pantalla.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+    """
     pygame.display.set_caption("Fisiks")
     bg = pygame.image.load(".\\assets\\background.png")
     bg = pygame.transform.scale(bg, (screen_size[0], screen_size[1]))
     screen.blit(bg, (0, 0))
 
 
-def main_menu(screen: pygame.Surface, screen_size: tuple, enlarge: bool):
-    """
-    *************** Drawing Main Menu ***************
+def main_menu(screen: pygame.Surface, screen_size: tuple[int, int], enlarge: bool) -> tuple[Button, Button]:
+    """Crea los botones y las cajas en el menú principal, y los dibuja en la pantalla.
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+        enlarge (bool): Condición de agrandar los botones o no, dependiendo si el ratón está encima del botón o no.
+
+    Returns:
+        tuple[Button, Button]: Devuelve los dos botones creados para poder acceder a sus datos más tarde.
     """
     title = "Fisiks"
     title_font_size = int(screen_size[1] * 0.12)
@@ -69,7 +80,15 @@ def main_menu(screen: pygame.Surface, screen_size: tuple, enlarge: bool):
     return PlayButton, QuitButton
 
 
-def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke_text: str, text: str):
+def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: str, text: str):
+    """Dibuja todas las partes del menú principal que no sean botones.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+        joke_text (str): El texto elegido del json de los chistes.
+        text (str): El texto elegido del json de los trucos.
+    """
     title = "Fisiks"
     title_font_size = int(screen_size[1] * 0.12)
     title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
@@ -88,28 +107,48 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple, joke
     text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
-    title_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.025), True)
+    title_font = pygame.font.SysFont(
+        "Calibri", int(screen_size[0]*0.025), True)
     title_surface = title_font.render("Chiste", True, [0, 0, 0])
-    title_rect = title_surface.get_rect(topleft=(screen_size[0]*(905/1280), screen_size[1]*(370/720)))
-    screen.blit(title_surface, title_rect) 
-    display_joke(screen, screen_size, joke_text, 0.56)
-    title_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.025), True)
+    title_rect = title_surface.get_rect(
+        topleft=(screen_size[0]*(905/1280), screen_size[1]*(370/720)))
+    screen.blit(title_surface, title_rect)
+    wrap_text(screen, screen_size, joke_text, 0.56)
+    title_font = pygame.font.SysFont(
+        "Calibri", int(screen_size[0]*0.025), True)
     title_surface = title_font.render("Truco", True, [0, 0, 0])
-    title_rect = title_surface.get_rect(topleft=(screen_size[0]*(905/1280), screen_size[1]*(210/720)))
-    screen.blit(title_surface, title_rect) 
+    title_rect = title_surface.get_rect(
+        topleft=(screen_size[0]*(905/1280), screen_size[1]*(210/720)))
+    screen.blit(title_surface, title_rect)
     print_tips(screen, screen_size, text)
 
 
-def select_joke():
-    with open(".\\assets\\jokes.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
-    n = random.randint(0, 49)
-    return data['jokes'][n]['joke']
+def select_joke() -> str:
+    """Elige un chiste aleatorio del json.
+
+    Returns:
+        str: Devuelve el chiste elegido en forma de string.
+    """
+    try:
+        with open(".\\assets\\jokes.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+        n = random.randint(0, len(data['jokes']) - 1)
+        return data['jokes'][n]['joke']
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
 
-def display_joke(screen: pygame.Surface, screen_size: tuple, joke_text: str, y_constant: float):
+def wrap_text(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: str, y_constant: float) -> str:
+    """Muestra un texto dentro de la caja, esta función hace un "textwrap", es decir, envuelve el texto para que ocupe el ancho de la caja pero no se pase y cambie de línea automaticamente. 
 
-
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+        joke_text (str): joke_text (str): El texto elegido del json de los chistes.
+        y_constant (float): La constante del eje y, para poder situar diferentes textos en distintas alturas.
+    """
     text_font = pygame.font.SysFont("Calibri", int(screen_size[0]*0.02))
 
     max_length = 30
@@ -127,7 +166,7 @@ def display_joke(screen: pygame.Surface, screen_size: tuple, joke_text: str, y_c
         else:
             text_surface = text_font.render(clean_text, True, [0, 0, 0])
             text_rect = text_surface.get_rect(topleft=(x, y))
-            screen.blit(text_surface, text_rect) 
+            screen.blit(text_surface, text_rect)
             clean_text = ""
             current_length = 0
             clean_text += word + " "
@@ -140,18 +179,45 @@ def display_joke(screen: pygame.Surface, screen_size: tuple, joke_text: str, y_c
 
 
 def select_tip():
-    with open(".\\assets\\tips.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
-    n = random.randint(0, 3)
-    return data['tips'][n]['tip']
+    """"Elige un truco aleatorio del json.
+
+    Returns:
+        str: Devuelve el truco elegido en forma de string.
+    """
+    try:
+        with open(".\\assets\\tips.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+        n = random.randint(0, len(data['tips']) - 1)
+        return data['tips'][n]['tip']
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
 
-def print_tips(screen: pygame.Surface, screen_size: tuple, text: str):
+def print_tips(screen: pygame.Surface, screen_size: tuple[int, int], text: str):
+    """Cambia la constante del eje y para poder imprimir el texto de trucos en una altura distinta en la caja del menú principal.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+        text (str): El texto elegido de los trucos para mostrar en pantalla.
+    """
     y_constant = 0.333
-    display_joke(screen, screen_size, text, y_constant)
+    wrap_text(screen, screen_size, text, y_constant)
 
 
-def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.font):
+def play_menu(screen: pygame.Surface, screen_size: tuple[int, int], buttons_font: pygame.font) -> tuple[Button, Button, Button, Button]:
+    """Imprime el menú de los niveles y crea sus botones.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+        buttons_font (pygame.font): El font usado para los botones en este menú.
+
+    Returns:
+        tuple[Button, Button, Button, Button]: Devuelve los botones creados para poder acceder a sus datos si fuera necesario.
+    """
     # Create buttons
     button_x1, button_x2, button_x3 = screen_size[0] * \
         0.17, screen_size[0] * 0.41, screen_size[0] * 0.65
@@ -173,7 +239,13 @@ def play_menu(screen: pygame.Surface, screen_size: tuple, buttons_font: pygame.f
     return Level1Button, Level2Button, Level3Button, BackButton
 
 
-def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple):
+def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int]):
+    """Crea las imágenes del menú de los niveles.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+    """
     screen.fill("white")
     title = "Niveles"
     title_font_size = int(screen_size[1] * 0.1)
@@ -204,7 +276,15 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple):
     screen.blit(back, (0, 0))
 
 
-def buttons_in_game(screen_size: tuple):
+def buttons_in_game(screen_size: tuple[int, int]) -> tuple[pygame.font.Font, Button, tuple[float, float], tuple[float, float], Button, tuple[float, float], tuple[float, float]]:
+    """Crea los botones en el menú de los niveles.
+
+    Args:
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        tuple[pygame.font.Font, Button, tuple[float, float], tuple[float, float], Button, tuple[float, float], tuple[float, float]]: Devuelve el font de los botones, unos botones y unas posiciones y tamaños de botones.
+    """
     buttons_font_size_IG = int(screen_size[1] * 0.06)
     buttons_font_IG = pygame.font.SysFont(
         "Calibri", buttons_font_size_IG, True)
@@ -221,7 +301,15 @@ def buttons_in_game(screen_size: tuple):
     return buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize
 
 
-def final_menu(screen_size):
+def final_menu(screen_size: tuple[int, int]) -> tuple[bool, int, int, int, int, pygame.surface.Surface, pygame.rect.Rect, int, pygame.font.Font, float, float, pygame.font.Font, float, pygame.font.Font, Button, Button, Button]:
+    """Muestra el menú tras haber ganado un nivel.
+
+    Args:
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        tuple[bool, int, int, int, int, pygame.surface.Surface, pygame.rect.Rect, int, pygame.font.Font, float, float, pygame.font.Font, float, pygame.font.Font, Button, Button, Button]: Devuelve unas condiciones y datos necesarios para la lógica del juego en el main. Tambíen devuelve unos botones y fonts.
+    """
     # End Box
     end = False
     text_box_width = int(screen_size[0] * 0.5)
@@ -264,7 +352,16 @@ def final_menu(screen_size):
     return end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton
 
 
-def level_1(screen: pygame.Surface, screen_size):
+def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
+    """Creación del nivel 1 y su lógica.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        bool: Devuelve una condición para decidir si el main debe cerrar el juego o no.
+    """
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -328,7 +425,8 @@ def level_1(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
+    permanent_surface.blit(
+        restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -448,7 +546,16 @@ def level_1(screen: pygame.Surface, screen_size):
     return quit_condition
 
 
-def level_2(screen: pygame.Surface, screen_size):
+def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
+    """Creación del nivel 2 y su lógica.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        bool: Devuelve una condición para decidir si el main debe cerrar el juego o no.
+    """
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -506,7 +613,8 @@ def level_2(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
+    permanent_surface.blit(
+        restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -628,7 +736,16 @@ def level_2(screen: pygame.Surface, screen_size):
     return quit_condition
 
 
-def level_3(screen: pygame.Surface, screen_size):
+def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
+    """Creación del nivel 3 y su lógica.
+
+    Args:
+        screen (pygame.Surface): La pantalla del juego.
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        bool: Devuelve una condición para decidir si el main debe cerrar el juego o no.
+    """
     clock = pygame.time.Clock()
     FPS = 144
 
@@ -707,7 +824,8 @@ def level_3(screen: pygame.Surface, screen_size):
     restart = pygame.image.load(".\\assets\\reset.png")
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
-    permanent_surface.blit(restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
+    permanent_surface.blit(
+        restart, (screen_size[0]*0.059375, screen_size[1]*0.0041666666666667))
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
@@ -828,7 +946,15 @@ def level_3(screen: pygame.Surface, screen_size):
     return quit_condition
 
 
-def choose_resolution(screen_size):
+def choose_resolution(screen_size: tuple[int, int]) -> tuple[Button, Button, Button, Button, Button, Button]:
+    """El menú para elegir la resolución del juego.
+
+    Args:
+        screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
+
+    Returns:
+        tuple[Button, Button, Button, Button, Button, Button]: Devuelve unos botones para luego aplicarlos en la lógica del menú.
+    """
     # Change Resolution Button
     ChangeResolutionButton = Button((screen_size[0]*0.38, screen_size[1]*0.8),
                                     (screen_size[0]*0.25, screen_size[1]*0.1), 1, "Aplicar Cambios", "black")
@@ -845,7 +971,12 @@ def choose_resolution(screen_size):
     return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
 
 
-def choose_resolution_screen():
+def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
+    """Imprime la pantalla para el menú de elegir la resolución.
+
+    Returns:
+        tuple[bool, tuple[int, int]]: Devuelve una condición para cerrar el juego y el tamaño de la pantalla elegido.
+    """
     screen_size_cr = (1280, 720)
     screen_size = screen_size_cr
     screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))

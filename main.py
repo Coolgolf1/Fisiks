@@ -34,7 +34,6 @@ if not quit_game:
 
     joke_text = f.select_joke()
     text = f.select_tip()
-    
 
     enlarge = False
     PlayButton, QuitButton = f.main_menu(
@@ -47,7 +46,7 @@ if not quit_game:
     buttons_font_size = int(screen_size[1] * 0.06)
     buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
 
-    f.display_joke(screen, screen_size, joke_text, 0.56)
+    f.wrap_text(screen, screen_size, joke_text, 0.56)
     f.print_tips(screen, screen_size, text)
 
     # Game Loop
@@ -139,7 +138,8 @@ if not quit_game:
                 PlayButton, QuitButton = f.main_menu(
                     screen, screen_size, enlarge)
                 joke_text = f.select_joke()
-                f.draw_additional_ui_elements(screen, screen_size, joke_text, text)
+                f.draw_additional_ui_elements(
+                    screen, screen_size, joke_text, text)
                 game = False
             if quit_condition:
                 running = False
