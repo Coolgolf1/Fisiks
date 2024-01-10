@@ -1,6 +1,5 @@
 import functions as f
 import pygame
-import time
 
 game = False
 quit_game = False
@@ -58,8 +57,6 @@ if not quit_game:
     running = True
     lmb_pressed = False
     while running:
-        if wait:
-            time.sleep(1/20)
         pos = (0, 0)
         hover_changed = False
         hover_pos = pygame.mouse.get_pos()

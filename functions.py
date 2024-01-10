@@ -413,10 +413,10 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     jar_lines.append(StaticLine(space, [(screen_size[0]*0.1171875, screen_size[1]),
                      (screen_size[0]*0.15625, screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
-    # ball = Ball(space, (screen_size[0]*0.9, screen_size[1]
-    #            * 0.12), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (screen_size[0]*0.9, screen_size[1]
+               * 0.12), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
+    # ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -432,11 +432,11 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
+    
     permanent_surface.blit(menu, (0, 0))
 
     running = True
     while running:
-        hover_changed = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -459,7 +459,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                 drawing = False
                 cancel = False
                 count_condition = False
-            if event.type == pygame.MOUSEBUTTONDOWN and end:
+            if event.type == pygame.MOUSEBUTTONUP and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
@@ -475,13 +475,32 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         screen.blit(permanent_surface, (0, 0))
 
-        ball.draw(screen)
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
+            NextLevelButton.draw(screen, buttons_font)
+
+        if end and (ball.body.position[1] >= screen_size[1]*0.95):
+            ball.draw(permanent_surface)
+        else:
+            ball.draw(screen)
+
 
         for line in lines:
-            line.draw(screen)
+            line.draw(permanent_surface)
 
         for line in jar_lines:
-            line.jar_draw(screen)
+            line.jar_draw(permanent_surface)
 
         if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
@@ -501,21 +520,8 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             center=(center_x_count_live, center_y_count_live))
         screen.blit(box_surface_count_live, box_rect_count_live)
 
-        if ball.body.position[1] >= screen_size[1]*0.9:
+        if ball.body.position[1] >= screen_size[1]*0.92:
             end = True
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
-            NextLevelButton.draw(screen, buttons_font)
             RBPos = RestartButton.position
             RBSize = RestartButton.size
             MBPos = MenuButton.position
@@ -523,18 +529,12 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             NLBPos = NextLevelButton.position
             NLBSize = NextLevelButton.size
             if end:
-                hover_changed = False
                 for button in [RestartButton, MenuButton, NextLevelButton]:
-                    if button.update_hover(pygame.mouse.get_pos()):
-                        hover_changed = True
-
-                    if hover_changed:
-                        for button in [RestartButton, MenuButton, NextLevelButton]:
-                            if button.hovered:
-                                button.draw_enlarged(screen, buttons_font)
-                            else:
-                                button.draw(screen, buttons_font)
-                    pygame.display.flip()
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
+                pygame.display.flip()
                 if menu_condition:
                     if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
                         screen.fill("white")
@@ -664,7 +664,7 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                 drawing = False
                 cancel = False
                 count_condition = False
-            if event.type == pygame.MOUSEBUTTONDOWN and end:
+            if event.type == pygame.MOUSEBUTTONUP and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
@@ -673,18 +673,40 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not end:
                     cancel = True
+            if event.type == pygame.MOUSEMOTION and end:
+                for button in [RestartButton, MenuButton, NextLevelButton]:
+                    if button.update_hover(pygame.mouse.get_pos()):
+                        hover_changed = True
 
         screen.blit(permanent_surface, (0, 0))
 
-        ball.draw(screen)
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
+            NextLevelButton.draw(screen, buttons_font)
+
+        if end and ball.body.position[1] >= screen_size[1]*0.95:
+            ball.draw(permanent_surface)
+        else:
+            ball.draw(screen)
 
         # space.debug_draw(draw_options)
 
         for line in lines:
-            line.draw(screen)
+            line.draw(permanent_surface)
 
         for line in jar_lines:
-            line.jar_draw(screen)
+            line.jar_draw(permanent_surface)
 
         if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
@@ -706,46 +728,45 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         if ball.body.position[1] <= screen_size[1] and ball.body.position[1] >= screen_size[1]*0.9 and (ball.body.position[0] <= screen_size[0]*(0.574-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.574-0.15626)):
             end = True
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
-            NextLevelButton.draw(screen, buttons_font)
             RBPos = RestartButton.position
             RBSize = RestartButton.size
             MBPos = MenuButton.position
             MBSize = MenuButton.size
             NLBPos = NextLevelButton.position
             NLBSize = NextLevelButton.size
-            if menu_condition:
-                if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_2(screen, screen_size)
-                elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    play_menu(screen, screen_size, buttons_font)
-                elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_3(screen, screen_size)
+            if end:
+                for button in [RestartButton, MenuButton, NextLevelButton]:
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
+                pygame.display.flip()
+                if menu_condition:
+                    if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
+                        screen.fill("white")
+                        permanent_surface.fill("white")
+                        running = False
+                        quit_condition = level_2(screen, screen_size)
+                    elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
+                        screen.fill("white")
+                        permanent_surface.fill("white")
+                        running = False
+                        play_menu(screen, screen_size, buttons_font)
+                    elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
+                        screen.fill("white")
+                        permanent_surface.fill("white")
+                        running = False
+                        quit_condition = level_3(screen, screen_size)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
                 screen.fill("white")
+                permanent_surface.fill("white")
                 running = False
                 level_2(screen, screen_size)
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
+                permanent_surface.fill("white")
                 running = False
                 play_menu(screen, screen_size, buttons_font)
 
@@ -833,7 +854,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     ball = Ball(space, (screen_size[0]*0.1, screen_size[1]
                 * 0.1), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    # ball = Ball(space, (150, 100), screen_size[1]*0.0555555555555556)
+    #ball = Ball(space, (150, 300), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -875,7 +896,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                 drawing = False
                 cancel = False
                 count_condition = False
-            if event.type == pygame.MOUSEBUTTONDOWN and end:
+            if event.type == pygame.MOUSEBUTTONUP and end:
                 pos = pygame.mouse.get_pos()
                 menu_condition = True
             if event.type == pygame.MOUSEMOTION and not end:
@@ -884,22 +905,45 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not end:
                     cancel = True
+            if event.type == pygame.MOUSEMOTION and end:
+                for button in [RestartButton, MenuButton, NextLevelButton]:
+                    if button.update_hover(pygame.mouse.get_pos()):
+                        hover_changed = True
 
         screen.blit(permanent_surface, (0, 0))
 
-        ball.draw(screen)
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
+            MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
+
+        if end and (ball.body.position[1] >= screen_size[1]*0.84 and ball.body.position[1] <= screen_size[1]*0.9):
+            ball.draw(permanent_surface)
+        else:
+            ball.draw(screen)
 
         for line in lines:
-            line.draw(screen)
+            line.draw(permanent_surface)
 
         for line in jar_lines:
-            line.jar_draw(screen)
+            line.jar_draw(permanent_surface)
 
         for spring in spring_lines_floor:
-            spring.spring_draw_floor(screen)
+            spring.spring_draw_floor(permanent_surface)
 
         for spring in spring_lines_wall:
-            spring.spring_draw_wall(screen)
+            spring.spring_draw_wall(permanent_surface)
 
         if drawing and len(points) > 1 and not cancel:
             pygame.draw.lines(screen, "gray", False, points, 10)
@@ -921,41 +965,38 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         if (ball.body.position[1] >= screen_size[1]*0.8 and ball.body.position[1] <= screen_size[1]*0.9) and (ball.body.position[0] <= screen_size[0]*(0.18-0.0390625) and ball.body.position[0] >= screen_size[0]*(0.18-0.15626)):
             end = True
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
-            MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
             RBPos = RestartButton.position
             RBSize = RestartButton.size
             MBPos = MenuButton.position
             MBSize = MenuButton.size
-            if menu_condition:
-                if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_3(screen, screen_size)
-                elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    play_menu(screen, screen_size, buttons_font)
+            if end:
+                for button in [RestartButton, MenuButton]:
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
+                pygame.display.flip()
+                if menu_condition:
+                    if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
+                        screen.fill("white")
+                        permanent_surface.fill("white")
+                        running = False
+                        quit_condition = level_3(screen, screen_size)
+                    elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
+                        screen.fill("white")
+                        permanent_surface.fill("white")
+                        running = False
+                        play_menu(screen, screen_size, buttons_font)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
                 screen.fill("white")
+                permanent_surface.fill("white")
                 running = False
                 quit_condition = level_3(screen, screen_size)
             elif (pos[0] >= MIGBPos[0]) and (pos[0] <= MIGBPos[0] + MIGBSize[0]) and (pos[1] >= MIGBPos[1]) and (pos[1] <= MIGBPos[1] + MIGBSize[1]):
                 screen.fill("white")
+                permanent_surface.fill("white")
                 running = False
                 play_menu(screen, screen_size, buttons_font)
 
