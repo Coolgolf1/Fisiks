@@ -370,6 +370,9 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     permanent_surface = pygame.Surface(screen.get_size())
     permanent_surface.fill("white")
 
+    buttons_font_size = int(screen_size[1] * 0.06)
+    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+
     drawings = []
     points = []
     drawing = False
@@ -410,10 +413,10 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     jar_lines.append(StaticLine(space, [(screen_size[0]*0.1171875, screen_size[1]),
                      (screen_size[0]*0.15625, screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
-    ball = Ball(space, (screen_size[0]*0.9, screen_size[1]
-                * 0.12), screen_size[1]*0.0555555555555556)
+    # ball = Ball(space, (screen_size[0]*0.9, screen_size[1]
+    #            * 0.12), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    # ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
+    ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
@@ -433,6 +436,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
     running = True
     while running:
+        hover_changed = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -464,6 +468,10 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not end:
                     cancel = True
+            if event.type == pygame.MOUSEMOTION and end:
+                for button in [RestartButton, MenuButton, NextLevelButton]:
+                    if button.update_hover(pygame.mouse.get_pos()):
+                        hover_changed = True
 
         screen.blit(permanent_surface, (0, 0))
 
@@ -493,7 +501,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             center=(center_x_count_live, center_y_count_live))
         screen.blit(box_surface_count_live, box_rect_count_live)
 
-        if ball.body.position[1] >= screen_size[1]*0.94:
+        if ball.body.position[1] >= screen_size[1]*0.9:
             end = True
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
@@ -514,19 +522,32 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             MBSize = MenuButton.size
             NLBPos = NextLevelButton.position
             NLBSize = NextLevelButton.size
-            if menu_condition:
-                if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_1(screen, screen_size)
-                elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    play_menu(screen, screen_size, buttons_font)
-                elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
-                    screen.fill("white")
-                    running = False
-                    quit_condition = level_2(screen, screen_size)
+            if end:
+                hover_changed = False
+                for button in [RestartButton, MenuButton, NextLevelButton]:
+                    if button.update_hover(pygame.mouse.get_pos()):
+                        hover_changed = True
+
+                    if hover_changed:
+                        for button in [RestartButton, MenuButton, NextLevelButton]:
+                            if button.hovered:
+                                button.draw_enlarged(screen, buttons_font)
+                            else:
+                                button.draw(screen, buttons_font)
+                    pygame.display.flip()
+                if menu_condition:
+                    if (pos[0] >= RBPos[0]) and (pos[0] <= RBPos[0] + RBSize[0]) and (pos[1] >= RBPos[1]) and (pos[1] <= RBPos[1] + RBSize[1]):
+                        screen.fill("white")
+                        running = False
+                        quit_condition = level_1(screen, screen_size)
+                    elif (pos[0] >= MBPos[0]) and (pos[0] <= MBPos[0] + MBSize[0]) and (pos[1] >= MBPos[1]) and (pos[1] <= MBPos[1] + MBSize[1]):
+                        screen.fill("white")
+                        running = False
+                        play_menu(screen, screen_size, buttons_font)
+                    elif (pos[0] >= NLBPos[0]) and (pos[0] <= NLBPos[0] + NLBSize[0]) and (pos[1] >= NLBPos[1]) and (pos[1] <= NLBPos[1] + NLBSize[1]):
+                        screen.fill("white")
+                        running = False
+                        quit_condition = level_2(screen, screen_size)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -912,8 +933,8 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             screen.blit(box_surface_count, box_rect_count)
             RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
             MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
-            RestartButton.draw(screen, buttons_font, "black")
-            MenuButton.draw(screen, buttons_font, "black")
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
             RBPos = RestartButton.position
             RBSize = RestartButton.size
             MBPos = MenuButton.position

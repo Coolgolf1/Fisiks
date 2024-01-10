@@ -1,5 +1,6 @@
 import functions as f
 import pygame
+import time
 
 game = False
 quit_game = False
@@ -57,6 +58,8 @@ if not quit_game:
     running = True
     lmb_pressed = False
     while running:
+        if wait:
+            time.sleep(1/20)
         pos = (0, 0)
         hover_changed = False
         hover_pos = pygame.mouse.get_pos()
@@ -127,8 +130,10 @@ if not quit_game:
 
             if (pos[0] >= L1BPos[0]) and (pos[0] <= L1BPos[0] + L1BSize[0]) and (pos[1] >= L1BPos[1]) and (pos[1] <= L1BPos[1] + L1BSize[1]):
                 quit_condition = f.level_1(screen, screen_size)
+                wait = True
             if (pos[0] >= L2BPos[0]) and (pos[0] <= L2BPos[0] + L2BSize[0]) and (pos[1] >= L2BPos[1]) and (pos[1] <= L2BPos[1] + L2BSize[1]):
                 quit_condition = f.level_2(screen, screen_size)
+                wait = True
             if (pos[0] >= L3BPos[0]) and (pos[0] <= L3BPos[0] + L3BSize[0]) and (pos[1] >= L3BPos[1]) and (pos[1] <= L3BPos[1] + L3BSize[1]):
                 quit_condition = f.level_3(screen, screen_size)
                 wait = True
