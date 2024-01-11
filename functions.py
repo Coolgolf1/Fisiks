@@ -63,6 +63,7 @@ def main_menu(screen: pygame.Surface, screen_size: tuple[int, int], enlarge: boo
                         (button_width, button_height), 2, "Jugar", "black")
     QuitButton = Button((button_x, quit_button_y),
                         (button_width, button_height), 2, "Salir", "black")
+    VolumeButton = Button((screen_size[0]*0.94, screen_size[1]*0.01), (screen_size[0]*0.05, screen_size[1]*0.05), 0, "", "white")
 
     if enlarge:
         if PlayButton.is_hovered(pygame.mouse.get_pos()):
@@ -78,7 +79,7 @@ def main_menu(screen: pygame.Surface, screen_size: tuple[int, int], enlarge: boo
         PlayButton.draw(screen, buttons_font)
         QuitButton.draw(screen, buttons_font)
 
-    return PlayButton, QuitButton
+    return PlayButton, QuitButton, VolumeButton
 
 
 def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: str, text: str):

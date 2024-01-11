@@ -4,10 +4,11 @@ import pygame
 game = False
 quit_game = False
 
-pygame.init()
-quit_game, screen_size = f.choose_resolution_screen()
-pygame.quit()
+# pygame.init()
+# quit_game, screen_size = f.choose_resolution_screen()
+# pygame.quit()
 
+screen_size = (1280, 720)
 
 if not quit_game:
     pygame.init()
@@ -36,15 +37,25 @@ if not quit_game:
     text = f.select_tip()
 
     enlarge = False
-    PlayButton, QuitButton = f.main_menu(
+    PlayButton, QuitButton, VolumeButtton = f.main_menu(
         screen, screen_size, enlarge)
     f.draw_additional_ui_elements(screen, screen_size, joke_text, text)
     PBSize = PlayButton.size
     PBPos = PlayButton.position
     QBSize = QuitButton.size
     QBPos = QuitButton.position
+    VBSize = VolumeButtton.size
+    VBPos = VolumeButtton.position
     buttons_font_size = int(screen_size[1] * 0.06)
-    buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
+
+    volume_on = pygame.image.load(".\\assets\\speaker_icon_on.png")
+    volume_on = pygame.transform.scale(
+        volume_on, (screen_size[0]*0.05, screen_size[1]*0.05))
+    screen.blit(
+        volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+    volume_off = pygame.image.load(".\\assets\\speaker_icon_off.png")
+    volume_off = pygame.transform.scale(
+        volume_off, (screen_size[0]*0.05, screen_size[1]*0.05))
 
     f.wrap_text(screen, screen_size, joke_text, 0.56)
     f.print_tips(screen, screen_size, text)
@@ -56,6 +67,7 @@ if not quit_game:
     wait = False
     running = True
     lmb_pressed = False
+    volume = True
     while running:
         pos = (0, 0)
         hover_changed = False
@@ -65,14 +77,26 @@ if not quit_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONUP and not wait and lmb_pressed:
+            if event.type == pygame.MOUSEBUTTONUP and lmb_pressed:
                 pos = pygame.mouse.get_pos()
                 lmb_pressed = False
             if event.type == pygame.MOUSEMOTION:
                 for button in [PlayButton, QuitButton]:
                     if button.update_hover(hover_pos):
                         hover_changed = True
-                wait = False
+
+        if (pos[0] >= VBPos[0]) and (pos[0] <= VBPos[0] + VBSize[0]) and (pos[1] >= VBPos[1]) and (pos[1] <= VBPos[1] + VBSize[1]) and not game:
+            volume = not volume
+
+        if volume:
+            pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+            screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+            pygame.mixer.music.set_volume(0.05)
+        else:
+            pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+            screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
+            pygame.mixer.music.set_volume(0)
+            
 
         if hover_changed and not game:
             screen.fill("white")
@@ -137,7 +161,7 @@ if not quit_game:
             if (pos[0] >= BBPos[0]) and (pos[0] <= BBPos[0] + BBSize[0]) and (pos[1] >= BBPos[1]) and (pos[1] <= BBPos[1] + BBSize[1]):
                 screen.fill("white")
                 f.print_screen(screen, screen_size)
-                PlayButton, QuitButton = f.main_menu(
+                PlayButton, QuitButton, VolumeButtton = f.main_menu(
                     screen, screen_size, enlarge)
                 joke_text = f.select_joke()
                 text = f.select_tip()
