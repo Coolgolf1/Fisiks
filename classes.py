@@ -198,4 +198,3 @@ class Ball:
                          (pos[0] + end_line.x, pos[1] + end_line.y), 2)
         pygame.draw.line(screen, "blue", pos,
                          (pos[0] - end_line.x, pos[1] - end_line.y), 2)
-

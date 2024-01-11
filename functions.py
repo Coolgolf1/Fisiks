@@ -414,7 +414,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                      (screen_size[0]*0.15625, screen_size[1]*y_scalable_constant*3)], 5))
     # Ball
     ball = Ball(space, (screen_size[0]*0.9, screen_size[1]
-               * 0.12), screen_size[1]*0.0555555555555556)
+                        * 0.12), screen_size[1]*0.0555555555555556)
     # Testing Ball
     # ball = Ball(space, (100, 400), screen_size[1]*0.0555555555555556)
 
@@ -432,7 +432,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     menu = pygame.image.load(".\\assets\\menu.png")
     menu = pygame.transform.scale(
         menu, (screen_size[0]*0.06, screen_size[1]*0.06))
-    
+
     permanent_surface.blit(menu, (0, 0))
 
     running = True
@@ -494,7 +494,6 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
             ball.draw(permanent_surface)
         else:
             ball.draw(screen)
-
 
         for line in lines:
             line.draw(permanent_surface)
@@ -854,7 +853,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     ball = Ball(space, (screen_size[0]*0.1, screen_size[1]
                 * 0.1), screen_size[1]*0.0555555555555556)
     # Testing Ball
-    #ball = Ball(space, (150, 300), screen_size[1]*0.0555555555555556)
+    # ball = Ball(space, (150, 300), screen_size[1]*0.0555555555555556)
 
     end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton = final_menu(
         screen_size)
