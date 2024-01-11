@@ -1040,6 +1040,7 @@ def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
     screen_size_cr = (1280, 720)
     screen_size = screen_size_cr
     screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))
+    pygame.display.set_caption("Fisiks - Resolution Screen")
     screen.fill("white")
     ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button = choose_resolution(
         screen_size_cr)
