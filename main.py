@@ -4,11 +4,9 @@ import pygame
 game = False
 quit_game = False
 
-# pygame.init()
-# quit_game, screen_size = f.choose_resolution_screen()
-# pygame.quit()
-
-screen_size = (1280, 720)
+pygame.init()
+quit_game, screen_size = f.choose_resolution_screen()
+pygame.quit()
 
 if not quit_game:
     pygame.init()
@@ -85,7 +83,7 @@ if not quit_game:
                     if button.update_hover(hover_pos):
                         hover_changed = True
 
-        if (pos[0] >= VBPos[0]) and (pos[0] <= VBPos[0] + VBSize[0]) and (pos[1] >= VBPos[1]) and (pos[1] <= VBPos[1] + VBSize[1]) and not game:
+        if (pos[0] >= VBPos[0]) and (pos[0] <= VBPos[0] + VBSize[0]) and (pos[1] >= VBPos[1]) and (pos[1] <= VBPos[1] + VBSize[1]):
             volume = not volume
 
         if volume:
