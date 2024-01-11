@@ -14,7 +14,7 @@ if not quit_game:
     pygame.mixer.init()
     pygame.mixer.music.load('.\\assets\\music.wav')
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.set_volume(0.1)
 
     screen = pygame.display.set_mode((screen_size[0], screen_size[1]))
 
@@ -116,6 +116,13 @@ if not quit_game:
             screen.fill("white")
             # Draw the play menu background
             f.draw_play_menu_bg(screen, screen_size)
+            if volume and game:
+                pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+            else:
+                pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
+
             Level1Button, Level2Button, Level3Button, BackButton = f.play_menu(
                 screen, screen_size, buttons_font)
 
@@ -130,6 +137,12 @@ if not quit_game:
                 screen.fill("white")
                 # Draw the play menu background
                 f.draw_play_menu_bg(screen, screen_size)
+                if volume and game:
+                    pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                    screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+                else:
+                    pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                    screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
                 for button in [Level1Button, Level2Button, Level3Button]:
                     if button.hovered:
                         button.draw_enlarged(screen, buttons_font)
