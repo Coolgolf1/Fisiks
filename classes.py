@@ -12,7 +12,13 @@ class Button:
         self.original_size = size
         self.hovered = False
 
-    def draw(self, screen, font):
+    def draw(self, screen: pygame.Surface, font: pygame.font.Font):
+        """Dibuja los botones en pantalla cuando se llama a esta función.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+            font (pygame.font.Font): El font usado para las letras que se quieren mostrar por pantalla en el botón.
+        """
         pygame.draw.rect(screen, self.colour, [
                          self.position[0], self.position[1], self.size[0], self.size[1]], self.outline_width)
 
@@ -23,7 +29,15 @@ class Button:
 
         screen.blit(text_surface, text_rect)
 
-    def is_hovered(self, mouse_pos):
+    def is_hovered(self, mouse_pos: tuple[int, int]) -> bool:
+        """Chequea si el ratón está por encima del botón o no.
+
+        Args:
+            mouse_pos (tuple[int, int]): La posición del ratón.
+
+        Returns:
+            bool: Devuelve si el ratón está o no encima del botón.
+        """
         # Check if the mouse is over the button
         if (self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and
                 self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]):
@@ -34,7 +48,13 @@ class Button:
             self.hovered = False
         return False
 
-    def draw_enlarged(self, screen, font):
+    def draw_enlarged(self, screen: pygame.Surface, font: pygame.font.Font):
+        """Dibuja el botón agrandado cuando el ratón está por encima.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+            font (pygame.font.Font): El font usado para las letras que se quieren mostrar por pantalla en el botón.
+        """
         # Calculate the enlarged size
         enlargement_factor = 1.1
         enlarged_size = (
@@ -54,8 +74,15 @@ class Button:
                                                   enlarged_position[1] + enlarged_size[1] // 2))
         screen.blit(text_surface, text_rect)
 
-    def update_hover(self, mouse_pos):
-        """ Update the hover state and return True if the state changed. """
+    def update_hover(self, mouse_pos: tuple[int, int]) -> bool:
+        """Mira si tras un movimiento de ratón, el ratón sigue encima del botón o no. 
+
+        Args:
+            mouse_pos (tuple[int, int]): La posición del ratón.
+
+        Returns:
+            bool: Devuelve la condición de si el ratón sigue encima o no del botón.
+        """
         previously_hovered = self.hovered
         self.hovered = self.position[0] <= mouse_pos[0] <= self.position[0] + self.size[0] and \
             self.position[1] <= mouse_pos[1] <= self.position[1] + self.size[1]
@@ -89,7 +116,7 @@ class FreehandDrawing:
 
 
 class StaticLine:
-    def __init__(self, space, points, thickness):
+    def __init__(self, space: pymunk.Space, points: list, thickness: int):
         self.thickness = thickness
         self.body = pymunk.Body(0, 0, pymunk.Body.STATIC)
         self.line_shape = pymunk.Segment(
@@ -99,25 +126,45 @@ class StaticLine:
         self.collision_type = 2
         space.add(self.body, self.line_shape)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
+        """Dibuja las líneas de color negro.
+
+        Args:
+            screen (pygame.Surface): _description_
+        """
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "black", start_pos, end_pos, self.thickness)
 
-    def jar_draw(self, screen):
+    def jar_draw(self, screen: pygame.Surface):
+        """Dibuja las líneas de color verde para el vaso.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+        """
         self.line_shape.elasticity = 0
         self.line_shape.friction = 2
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "green", start_pos, end_pos, self.thickness)
 
-    def spring_draw_floor(self, screen):
+    def spring_draw_floor(self, screen: pygame.Surface):
+        """Dibuja las líneas de color naranja para los muelles débiles.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+        """
         self.line_shape.elasticity = 1.8
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
         pygame.draw.line(screen, "orange", start_pos, end_pos, self.thickness)
 
-    def spring_draw_wall(self, screen):
+    def spring_draw_wall(self, screen: pygame.Surface):
+        """Dibuja las líneas de color rojo para los muelles fuertes.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+        """
         self.line_shape.elasticity = 7
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
@@ -125,7 +172,7 @@ class StaticLine:
 
 
 class Ball:
-    def __init__(self, space, pos, radius):
+    def __init__(self, space: pymunk.Space, pos: tuple[int, int], radius: int):
         self.radius = radius
         mass = 1
         moment = pymunk.moment_for_circle(mass, 0, self.radius, (0, 0))
@@ -137,7 +184,12 @@ class Ball:
         self.collision_type = 1
         space.add(self.body, self.shape)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface):
+        """Dibuja la bola en la posición que se quiera dibujar.
+
+        Args:
+            screen (pygame.Surface): La pantalla del juego.
+        """
         pos = int(self.body.position.x), int(self.body.position.y)
         angle = self.body.angle
         pygame.draw.circle(screen, [231, 84, 128], pos, self.radius)

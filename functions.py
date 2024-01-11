@@ -206,7 +206,7 @@ def print_tips(screen: pygame.Surface, screen_size: tuple[int, int], text: str):
     wrap_text(screen, screen_size, text, y_constant)
 
 
-def play_menu(screen: pygame.Surface, screen_size: tuple[int, int], buttons_font: pygame.font) -> tuple[Button, Button, Button, Button]:
+def play_menu(screen: pygame.Surface, screen_size: tuple[int, int], buttons_font: pygame.font.Font) -> tuple[Button, Button, Button, Button]:
     """Imprime el menú de los niveles y crea sus botones.
 
     Args:
