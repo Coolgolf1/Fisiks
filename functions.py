@@ -7,13 +7,15 @@ import pymunk.pygame_util
 
 
 def print_screen(screen: pygame.Surface, screen_size: tuple[int, int]):
-    """Muestra en pantalla el fondo del menú principal y lo ajusta para el tamaño de la pantalla.
+    """Muestra en pantalla el fondo del menú principal y lo ajusta para el tamaño de la pantalla, tambíen añade el icóno a la pantalla del juego.
 
     Args:
         screen (pygame.Surface): La pantalla del juego.
         screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
     """
     pygame.display.set_caption("Fisiks")
+    icon = pygame.image.load(".\\assets\\icon.png")
+    pygame.display.set_icon(icon)
     bg = pygame.image.load(".\\assets\\background.png")
     bg = pygame.transform.scale(bg, (screen_size[0], screen_size[1]))
     screen.blit(bg, (0, 0))
@@ -1040,6 +1042,8 @@ def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
     screen_size_cr = (1280, 720)
     screen_size = screen_size_cr
     screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))
+    icon = pygame.image.load(".\\assets\\icon.png")
+    pygame.display.set_icon(icon)
     pygame.display.set_caption("Fisiks - Resolution Screen")
     screen.fill("white")
     ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button = choose_resolution(
