@@ -527,7 +527,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
-                
+
         if end:
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
@@ -742,7 +742,7 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
-                
+
         if end:
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
@@ -987,7 +987,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
-                
+
         if end:
             pygame.draw.rect(screen, [255, 255, 255], (
                 text_box_x, text_box_y, text_box_width, text_box_height))
