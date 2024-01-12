@@ -6,10 +6,9 @@ quit_game = False
 
 f.check_json()
 
-# pygame.init()
-# quit_game, screen_size = f.choose_resolution_screen()
-# pygame.quit()
-screen_size = (1280, 720)
+pygame.init()
+quit_game, screen_size = f.choose_resolution_screen()
+pygame.quit()
 
 if not quit_game:
     pygame.init()
