@@ -505,21 +505,6 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         screen.blit(permanent_surface, (0, 0))
 
-        if end:
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
-            NextLevelButton.draw(screen, buttons_font)
-
         if end and (ball.body.position[1] >= screen_size[1]*0.95):
             ball.draw(permanent_surface)
         else:
@@ -542,6 +527,21 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
+                
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
+            NextLevelButton.draw(screen, buttons_font)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -718,21 +718,6 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         screen.blit(permanent_surface, (0, 0))
 
-        if end:
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
-            NextLevelButton.draw(screen, buttons_font)
-
         if end and ball.body.position[1] >= screen_size[1]*0.95:
             ball.draw(permanent_surface)
         else:
@@ -757,6 +742,21 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
+                
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
+            NextLevelButton.draw(screen, buttons_font)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
@@ -959,22 +959,6 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
 
         screen.blit(permanent_surface, (0, 0))
 
-        if end:
-            pygame.draw.rect(screen, [255, 255, 255], (
-                text_box_x, text_box_y, text_box_width, text_box_height))
-            pygame.draw.rect(screen, [0, 0, 0], (
-                text_box_x, text_box_y, text_box_width, text_box_height), 2)
-            screen.blit(box_surface_congrats, box_rect_congrats)
-            box_surface_count = box_font_count.render(
-                f"Líneas dibujadas: {count}", True, [0, 0, 0])
-            box_rect_count = box_surface_count.get_rect(
-                center=(center_x_count, center_y_count))
-            screen.blit(box_surface_count, box_rect_count)
-            RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
-            MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
-            RestartButton.draw(screen, buttons_font)
-            MenuButton.draw(screen, buttons_font)
-
         if end and (ball.body.position[1] >= screen_size[1]*0.84 and ball.body.position[1] <= screen_size[1]*0.9):
             ball.draw(permanent_surface)
         else:
@@ -1003,6 +987,22 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                     shape.b.rotated(drawing.body.angle)
                 pygame.draw.line(screen, "blue", start_world,
                                  end_world, thickness)
+                
+        if end:
+            pygame.draw.rect(screen, [255, 255, 255], (
+                text_box_x, text_box_y, text_box_width, text_box_height))
+            pygame.draw.rect(screen, [0, 0, 0], (
+                text_box_x, text_box_y, text_box_width, text_box_height), 2)
+            screen.blit(box_surface_congrats, box_rect_congrats)
+            box_surface_count = box_font_count.render(
+                f"Líneas dibujadas: {count}", True, [0, 0, 0])
+            box_rect_count = box_surface_count.get_rect(
+                center=(center_x_count, center_y_count))
+            screen.blit(box_surface_count, box_rect_count)
+            RestartButton.position = (screen_size[0]*0.37, screen_size[1]*0.58)
+            MenuButton.position = (screen_size[0]*0.53, screen_size[1]*0.58)
+            RestartButton.draw(screen, buttons_font)
+            MenuButton.draw(screen, buttons_font)
 
         box_surface_count_live = box_font_count_live.render(
             f"Líneas dibujadas: {count}", True, [0, 0, 0])
