@@ -181,7 +181,7 @@ def wrap_text(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: s
         screen.blit(text_surface, text_rect)
 
 
-def select_tip():
+def select_tip() -> str:
     """"Elige un truco aleatorio del json. Tiene dentro un error handling por si hay algún error con el json.
 
     Returns:
@@ -1219,19 +1219,24 @@ def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
     return quit_game, screen_size_cr
 
 
-def check_json():
-    with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
+def check_json() -> str:
+    try:
+        with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
 
-    if data['local_load'][0]['times'] == 0:
-        for n in range(len(data['scores'])):
-            data['scores'][n]['score'] = 0
+        if data['local_load'][0]['times'] == 0:
+            for n in range(len(data['scores'])):
+                data['scores'][n]['score'] = 0
+                with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=4)
+            data['local_load'][0]['times'] = 1
             with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
-        data['local_load'][0]['times'] = 1
-        with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-    else:
-        data['local_load'][0]['times'] += 1
-        with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+        else:
+            data['local_load'][0]['times'] += 1
+            with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."

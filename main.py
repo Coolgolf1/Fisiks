@@ -86,6 +86,8 @@ if not quit_game:
                     if button.update_hover(hover_pos):
                         hover_changed = True
 
+        # Volume Logic
+                        
         if (pos[0] >= VBPos[0]) and (pos[0] <= VBPos[0] + VBSize[0]) and (pos[1] >= VBPos[1]) and (pos[1] <= VBPos[1] + VBSize[1]):
             volume = not volume
 
@@ -100,6 +102,8 @@ if not quit_game:
             screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
             pygame.mixer.music.set_volume(0)
 
+        # Enlarge Buttons On Hover
+
         if hover_changed and not game:
             screen.fill("white")
             f.print_screen(screen, screen_size)
@@ -112,6 +116,8 @@ if not quit_game:
                     button.draw(screen, buttons_font)
 
             pygame.display.flip()
+
+        # Levels Menu Button and Exit Button Logic
 
         if (pos[0] >= QBPos[0]) and (pos[0] <= QBPos[0] + QBSize[0]) and (pos[1] >= QBPos[1]) and (pos[1] <= QBPos[1] + QBSize[1]) and not game:
             running = False
@@ -133,6 +139,8 @@ if not quit_game:
 
             Level1Button, Level2Button, Level3Button, BackButton = f.play_menu(
                 screen, screen_size, buttons_font)
+
+        # Levels Menu Begins
 
         if game:
             hover_changed = False
@@ -172,6 +180,8 @@ if not quit_game:
             BBPos = BackButton.position
             BBSize = BackButton.size
 
+            # Level 1 Start Logic
+
             if (pos[0] >= L1BPos[0]) and (pos[0] <= L1BPos[0] + L1BSize[0]) and (pos[1] >= L1BPos[1]) and (pos[1] <= L1BPos[1] + L1BSize[1]):
                 quit_condition = f.level_1(screen, screen_size)
                 f.draw_play_menu_bg(screen, screen_size)
@@ -180,6 +190,9 @@ if not quit_game:
                         button.draw_enlarged(screen, buttons_font)
                     else:
                         button.draw(screen, buttons_font)
+
+            # Level 2 Start Logic
+
             if (pos[0] >= L2BPos[0]) and (pos[0] <= L2BPos[0] + L2BSize[0]) and (pos[1] >= L2BPos[1]) and (pos[1] <= L2BPos[1] + L2BSize[1]):
                 quit_condition = f.level_2(screen, screen_size)
                 f.draw_play_menu_bg(screen, screen_size)
@@ -188,6 +201,9 @@ if not quit_game:
                         button.draw_enlarged(screen, buttons_font)
                     else:
                         button.draw(screen, buttons_font)
+
+            # Level 3 Start Logic
+
             if (pos[0] >= L3BPos[0]) and (pos[0] <= L3BPos[0] + L3BSize[0]) and (pos[1] >= L3BPos[1]) and (pos[1] <= L3BPos[1] + L3BSize[1]):
                 quit_condition = f.level_3(screen, screen_size)
                 f.draw_play_menu_bg(screen, screen_size)
@@ -196,6 +212,9 @@ if not quit_game:
                         button.draw_enlarged(screen, buttons_font)
                     else:
                         button.draw(screen, buttons_font)
+
+            # Return To Main Menu Logic
+
             if (pos[0] >= BBPos[0]) and (pos[0] <= BBPos[0] + BBSize[0]) and (pos[1] >= BBPos[1]) and (pos[1] <= BBPos[1] + BBSize[1]):
                 screen.fill("white")
                 f.print_screen(screen, screen_size)
