@@ -4,9 +4,12 @@ import pygame
 game = False
 quit_game = False
 
-pygame.init()
-quit_game, screen_size = f.choose_resolution_screen()
-pygame.quit()
+f.check_json()
+
+# pygame.init()
+# quit_game, screen_size = f.choose_resolution_screen()
+# pygame.quit()
+screen_size = (1280, 720)
 
 if not quit_game:
     pygame.init()
@@ -66,6 +69,7 @@ if not quit_game:
     running = True
     lmb_pressed = False
     volume = True
+
     while running:
         pos = (0, 0)
         hover_changed = False
@@ -87,14 +91,15 @@ if not quit_game:
             volume = not volume
 
         if volume:
-            pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+            pygame.draw.rect(
+                screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
             screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
             pygame.mixer.music.set_volume(0.05)
         else:
-            pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+            pygame.draw.rect(
+                screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
             screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
             pygame.mixer.music.set_volume(0)
-            
 
         if hover_changed and not game:
             screen.fill("white")
@@ -117,11 +122,15 @@ if not quit_game:
             # Draw the play menu background
             f.draw_play_menu_bg(screen, screen_size)
             if volume and game:
-                pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
-                screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+                pygame.draw.rect(
+                    screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                screen.blit(
+                    volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
             else:
-                pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
-                screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
+                pygame.draw.rect(
+                    screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                screen.blit(
+                    volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
 
             Level1Button, Level2Button, Level3Button, BackButton = f.play_menu(
                 screen, screen_size, buttons_font)
@@ -138,11 +147,15 @@ if not quit_game:
                 # Draw the play menu background
                 f.draw_play_menu_bg(screen, screen_size)
                 if volume and game:
-                    pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
-                    screen.blit(volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
+                    pygame.draw.rect(
+                        screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                    screen.blit(
+                        volume_on, (screen_size[0]*0.94, screen_size[1]*0.01))
                 else:
-                    pygame.draw.rect(screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
-                    screen.blit(volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
+                    pygame.draw.rect(
+                        screen, "white", (VBPos[0], VBPos[1], VBSize[0], VBSize[1]), 0)
+                    screen.blit(
+                        volume_off, (screen_size[0]*0.94, screen_size[1]*0.01))
                 for button in [Level1Button, Level2Button, Level3Button]:
                     if button.hovered:
                         button.draw_enlarged(screen, buttons_font)
@@ -162,13 +175,28 @@ if not quit_game:
 
             if (pos[0] >= L1BPos[0]) and (pos[0] <= L1BPos[0] + L1BSize[0]) and (pos[1] >= L1BPos[1]) and (pos[1] <= L1BPos[1] + L1BSize[1]):
                 quit_condition = f.level_1(screen, screen_size)
-                wait = True
+                f.draw_play_menu_bg(screen, screen_size)
+                for button in [Level1Button, Level2Button, Level3Button]:
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
             if (pos[0] >= L2BPos[0]) and (pos[0] <= L2BPos[0] + L2BSize[0]) and (pos[1] >= L2BPos[1]) and (pos[1] <= L2BPos[1] + L2BSize[1]):
                 quit_condition = f.level_2(screen, screen_size)
-                wait = True
+                f.draw_play_menu_bg(screen, screen_size)
+                for button in [Level1Button, Level2Button, Level3Button]:
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
             if (pos[0] >= L3BPos[0]) and (pos[0] <= L3BPos[0] + L3BSize[0]) and (pos[1] >= L3BPos[1]) and (pos[1] <= L3BPos[1] + L3BSize[1]):
                 quit_condition = f.level_3(screen, screen_size)
-                wait = True
+                f.draw_play_menu_bg(screen, screen_size)
+                for button in [Level1Button, Level2Button, Level3Button]:
+                    if button.hovered:
+                        button.draw_enlarged(screen, buttons_font)
+                    else:
+                        button.draw(screen, buttons_font)
             if (pos[0] >= BBPos[0]) and (pos[0] <= BBPos[0] + BBSize[0]) and (pos[1] >= BBPos[1]) and (pos[1] <= BBPos[1] + BBSize[1]):
                 screen.fill("white")
                 f.print_screen(screen, screen_size)

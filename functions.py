@@ -63,7 +63,8 @@ def main_menu(screen: pygame.Surface, screen_size: tuple[int, int], enlarge: boo
                         (button_width, button_height), 2, "Jugar", "black")
     QuitButton = Button((button_x, quit_button_y),
                         (button_width, button_height), 2, "Salir", "black")
-    VolumeButton = Button((screen_size[0]*0.94, screen_size[1]*0.01), (screen_size[0]*0.05, screen_size[1]*0.05), 0, "", "white")
+    VolumeButton = Button((screen_size[0]*0.94, screen_size[1]*0.01),
+                          (screen_size[0]*0.05, screen_size[1]*0.05), 0, "", "white")
 
     if enlarge:
         if PlayButton.is_hovered(pygame.mouse.get_pos()):
@@ -276,6 +277,32 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int]):
     back = pygame.transform.scale(
         back, (screen_size[0]*0.06, screen_size[1]*0.08))
     screen.blit(back, (0, 0))
+
+    score_font_size = int(screen_size[1] * 0.05)
+    score_font = pygame.font.SysFont("Calibri", score_font_size)
+
+    try:
+        with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+            length = len(data['scores'])
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
+
+    for n in range(length):
+        if data['scores'][n]['score'] == 0:
+            score = "No intentado"
+            score_surface = score_font.render(score, True, [0, 0, 0])
+            score_rect = score_surface.get_rect(
+                center=(screen_size[0] * (0.27 + 0.24*n), screen_size[1]*0.3))
+            screen.blit(score_surface, score_rect)
+        else:
+            score = f"High Score: {data['scores'][n]['score']}"
+            score_surface = score_font.render(score, True, [0, 0, 0])
+            score_rect = score_surface.get_rect(
+                center=(screen_size[0] * (0.27 + 0.24*n), screen_size[1]*0.3))
+            screen.blit(score_surface, score_rect)
 
 
 def buttons_in_game(screen_size: tuple[int, int]) -> tuple[pygame.font.Font, Button, tuple[float, float], tuple[float, float], Button, tuple[float, float], tuple[float, float]]:
@@ -551,6 +578,15 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                         running = False
                         quit_condition = level_2(screen, screen_size)
 
+                    n = 0
+                    with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+                        data = json.load(f)
+
+                    data['scores'][n]['score'] = count
+
+                    with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=4)
+
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
                 screen.fill("white")
@@ -759,6 +795,15 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                         permanent_surface.fill("white")
                         running = False
                         quit_condition = level_3(screen, screen_size)
+
+                    n = 1
+                    with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+                        data = json.load(f)
+
+                    data['scores'][n]['score'] = count
+
+                    with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=4)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -990,6 +1035,15 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
                         running = False
                         play_menu(screen, screen_size, buttons_font)
 
+                    n = 2
+                    with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+                        data = json.load(f)
+
+                    data['scores'][n]['score'] = count
+
+                    with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=4)
+
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
                 screen.fill("white")
@@ -1163,3 +1217,21 @@ def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
         pygame.display.flip()
 
     return quit_game, screen_size_cr
+
+
+def check_json():
+    with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
+
+    if data['local_load'][0]['times'] == 0:
+        for n in range(len(data['scores'])):
+            data['scores'][n]['score'] = 0
+            with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+        data['local_load'][0]['times'] = 1
+        with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    else:
+        data['local_load'][0]['times'] += 1
+        with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
