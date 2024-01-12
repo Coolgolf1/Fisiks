@@ -3,7 +3,7 @@ import pymunk
 
 
 class Button:
-    def __init__(self, position: tuple, size: tuple, outline_width: int, text: str, colour: str):
+    def __init__(self, position: tuple[float, float], size: tuple[float, float], outline_width: int, text: str, colour: str):
         self.colour = colour
         self.position = position
         self.size = size
@@ -90,7 +90,7 @@ class Button:
 
 
 class FreehandDrawing:
-    def __init__(self, space, points: list, thickness=10):
+    def __init__(self, space: pymunk.Space, points: list, thickness=10):
         if len(points) < 2:
             return
 
@@ -130,7 +130,7 @@ class StaticLine:
         """Dibuja las líneas de color negro.
 
         Args:
-            screen (pygame.Surface): _description_
+            screen (pygame.Surface): La pantalla del juego.
         """
         start_pos = self.line_shape.a
         end_pos = self.line_shape.b
