@@ -298,7 +298,7 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int]):
                 center=(screen_size[0] * (0.27 + 0.24*n), screen_size[1]*0.3))
             screen.blit(score_surface, score_rect)
         else:
-            score = f"High Score: {data['scores'][n]['score']}"
+            score = f"Best Score: {data['scores'][n]['score']}"
             score_surface = score_font.render(score, True, [0, 0, 0])
             score_rect = score_surface.get_rect(
                 center=(screen_size[0] * (0.27 + 0.24*n), screen_size[1]*0.3))
