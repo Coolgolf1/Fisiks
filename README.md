@@ -1,5 +1,7 @@
 # Fisiks
 
+Even though the game was made to be published in english, the menus and levels are in spanish as it was a project for my studies. I will update the game soon so that it is in english.
+
 ## Introduction
 **"Fisiks"** is an engaging physics-based puzzle game where players use their creativity to draw lines, guiding a ball into a jar. This game elegantly combines realistic physics involving collisions and gravity across three levels of increasing difficulty, providing a blend of fun and intellectual challenge.
 
