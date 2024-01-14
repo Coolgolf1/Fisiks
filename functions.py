@@ -6,7 +6,7 @@ import json
 import pymunk.pygame_util
 
 
-def print_screen(screen: pygame.Surface, screen_size: tuple[int, int], system: str):
+def print_screen(screen: pygame.Surface, screen_size: tuple[int, int]):
     """Muestra en pantalla el fondo del menú principal y lo ajusta para el tamaño de la pantalla, tambíen añade el icóno a la pantalla del juego.
 
     Args:
@@ -14,13 +14,8 @@ def print_screen(screen: pygame.Surface, screen_size: tuple[int, int], system: s
         screen_size (tuple[int, int]): El tamaño de la pantalla del juego.
     """
     pygame.display.set_caption("Fisiks")
-    if system == "Linux":
-        icon = pygame.image.load("./assets/icon.png")
-        bg = pygame.image.load("./assets/background.png")
-    else:
-        icon = pygame.image.load(".\\assets\\icon.png")
-        bg = pygame.image.load(".\\assets\\background.png")
-
+    icon = pygame.image.load("./assets/icon.png")
+    bg = pygame.image.load("./assets/background.png")
     pygame.display.set_icon(icon)
     
     bg = pygame.transform.scale(bg, (screen_size[0], screen_size[1]))
@@ -132,32 +127,21 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple[int, 
     print_tips(screen, screen_size, text)
 
 
-def select_joke(system: str) -> str:
+def select_joke() -> str:
     """Elige un chiste aleatorio del json. Tiene dentro un error handling por si hay algún error con el json.
 
     Returns:
         str: Devuelve el chiste elegido en forma de string.
     """
-    if system == "Linux":
-        try:
-            with open("./assets/jokes.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-            n = random.randint(0, len(data['jokes']) - 1)
-            return data['jokes'][n]['joke']
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
-    else:
-        try:
-            with open(".\\assets\\jokes.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-            n = random.randint(0, len(data['jokes']) - 1)
-            return data['jokes'][n]['joke']
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
+    try:
+        with open("./assets/jokes.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+        n = random.randint(0, len(data['jokes']) - 1)
+        return data['jokes'][n]['joke']
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
 
 def wrap_text(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: str, y_constant: float) -> str:
@@ -198,32 +182,21 @@ def wrap_text(screen: pygame.Surface, screen_size: tuple[int, int], joke_text: s
         screen.blit(text_surface, text_rect)
 
 
-def select_tip(system: str) -> str:
+def select_tip() -> str:
     """"Elige un truco aleatorio del json. Tiene dentro un error handling por si hay algún error con el json.
 
     Returns:
         str: Devuelve el truco elegido en forma de string.
     """
-    if system == "Linux":
-        try:
-            with open("./assets/tips.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-            n = random.randint(0, len(data['tips']) - 1)
-            return data['tips'][n]['tip']
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
-    else:
-        try:
-            with open(".\\assets\\tips.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-            n = random.randint(0, len(data['tips']) - 1)
-            return data['tips'][n]['tip']
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
+    try:
+        with open("./assets/tips.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+        n = random.randint(0, len(data['tips']) - 1)
+        return data['tips'][n]['tip']
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
 
 def print_tips(screen: pygame.Surface, screen_size: tuple[int, int], text: str):
@@ -270,7 +243,7 @@ def play_menu(screen: pygame.Surface, screen_size: tuple[int, int], buttons_font
     return Level1Button, Level2Button, Level3Button, BackButton
 
 
-def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int], system: str):
+def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int]):
     """Crea las imágenes del menú de los niveles.
 
     Args:
@@ -286,22 +259,22 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int], syst
     text_rect = text_surface.get_rect(center=(screen_size[0] / 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
-    bg1 = pygame.image.load(".\\assets\\first_level.png")
+    bg1 = pygame.image.load("./assets/first_level.png")
     bg1 = pygame.transform.scale(bg1, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg1, (screen_size[0] * 0.17, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.17, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    bg2 = pygame.image.load(".\\assets\\second_level.png")
+    bg2 = pygame.image.load("./assets/second_level.png")
     bg2 = pygame.transform.scale(bg2, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg2, (screen_size[0] * 0.41, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.41, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    bg3 = pygame.image.load(".\\assets\\third_level.png")
+    bg3 = pygame.image.load("./assets/third_level.png")
     bg3 = pygame.transform.scale(bg3, (screen_size[0]*0.2, screen_size[1]*0.2))
     screen.blit(bg3, (screen_size[0] * 0.65, screen_size[1]*0.35))
     pygame.draw.rect(screen, "black", [
                      screen_size[0] * 0.65, screen_size[1]*0.35, screen_size[0]*0.2, screen_size[1]*0.203], 2)
-    back = pygame.image.load(".\\assets\\home.png")
+    back = pygame.image.load("./assets/home.png")
     back = pygame.transform.scale(
         back, (screen_size[0]*0.06, screen_size[1]*0.08))
     screen.blit(back, (0, 0))
@@ -309,24 +282,14 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int], syst
     score_font_size = int(screen_size[1] * 0.05)
     score_font = pygame.font.SysFont("Calibri", score_font_size)
 
-    if system == "Linux":
-        try:
-            with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-                length = len(data['scores'])
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
-    else:
-        try:
-            with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-                length = len(data['scores'])
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
+    try:
+        with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+            length = len(data['scores'])
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
     for n in range(length):
         if data['scores'][n]['score'] == 0:
@@ -419,7 +382,7 @@ def final_menu(screen_size: tuple[int, int]) -> tuple[bool, int, int, int, int, 
     return end, text_box_width, text_box_height, text_box_x, text_box_y, box_surface_congrats, box_rect_congrats, count, box_font_count_live, center_x_count_live, center_y_count_live, box_font_count, center_x_count, center_y_count, buttons_font, RestartButton, MenuButton, NextLevelButton
 
 
-def level_1(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -> bool:
+def level_1(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     """Creación del nivel 1 y su lógica.
 
     Args:
@@ -492,7 +455,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
     buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
         screen_size)
 
-    restart, menu = load_restart_menu_icons(system)
+    restart, menu = load_restart_menu_icons()
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
     permanent_surface.blit(
@@ -615,7 +578,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
                         running = False
                         quit_condition = level_2(screen, screen_size)
 
-                    save_score(0, count, system)
+                    save_score(0, count)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -634,7 +597,7 @@ def level_1(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
     return quit_condition
 
 
-def level_2(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -> bool:
+def level_2(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     """Creación del nivel 2 y su lógica.
 
     Args:
@@ -698,7 +661,7 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
     buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
         screen_size)
 
-    restart, menu = load_restart_menu_icons(system)
+    restart, menu = load_restart_menu_icons()
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
     permanent_surface.blit(
@@ -825,7 +788,7 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
                         running = False
                         quit_condition = level_3(screen, screen_size)
 
-                    save_score(1, count, system)
+                    save_score(1, count)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -846,7 +809,7 @@ def level_2(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
     return quit_condition
 
 
-def level_3(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -> bool:
+def level_3(screen: pygame.Surface, screen_size: tuple[int, int]) -> bool:
     """Creación del nivel 3 y su lógica.
 
     Args:
@@ -931,7 +894,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
     buttons_font_IG, RestartButtonIG, RIGBPos, RIGBSize, MenuButtonIG, MIGBPos, MIGBSize = buttons_in_game(
         screen_size)
 
-    restart, menu = load_restart_menu_icons(system)
+    restart, menu = load_restart_menu_icons()
 
     restart = pygame.transform.scale(
         restart, (screen_size[0]*0.05, screen_size[1]*0.05))
@@ -1058,7 +1021,7 @@ def level_3(screen: pygame.Surface, screen_size: tuple[int, int], system: str) -
                         running = False
                         play_menu(screen, screen_size, buttons_font)
 
-                    save_score(2, count, system)
+                    save_score(2, count)
 
         if clicked:
             if (pos[0] >= RIGBPos[0]) and (pos[0] <= RIGBPos[0] + RIGBSize[0]) and (pos[1] >= RIGBPos[1]) and (pos[1] <= RIGBPos[1] + RIGBSize[1]):
@@ -1104,7 +1067,7 @@ def choose_resolution(screen_size: tuple[int, int]) -> tuple[Button, Button, But
     return ChangeResolutionButton, Res1Button, Res2Button, Res3Button, Res4Button
 
 
-def choose_resolution_screen(system: str) -> tuple[bool, tuple[int, int]]:
+def choose_resolution_screen() -> tuple[bool, tuple[int, int]]:
     """Imprime la pantalla para el menú de elegir la resolución.
 
     Returns:
@@ -1113,10 +1076,7 @@ def choose_resolution_screen(system: str) -> tuple[bool, tuple[int, int]]:
     screen_size_cr = (1280, 720)
     screen_size = screen_size_cr
     screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))
-    if system == "Linux":
-        icon = pygame.image.load("./assets/icon.png")
-    else:
-        icon = pygame.image.load(".\\assets\\icon.png")
+    icon = pygame.image.load("./assets/icon.png")
     pygame.display.set_icon(icon)
     pygame.display.set_caption("Fisiks - Resolution Screen")
     screen.fill("white")
@@ -1238,76 +1198,41 @@ def choose_resolution_screen(system: str) -> tuple[bool, tuple[int, int]]:
     return quit_game, screen_size_cr
 
 
-def check_json(system: str) -> str:
-    if system == "Linux":
-        try:
-            with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-
-            if data['local_load'][0]['times'] == 0:
-                for n in range(len(data['scores'])):
-                    data['scores'][n]['score'] = 0
-                    with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
-                        json.dump(data, f, ensure_ascii=False, indent=4)
-                data['local_load'][0]['times'] = 1
-                with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-            else:
-                data['local_load'][0]['times'] += 1
-                with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
-    else:
-        try:
-            with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
-                data = json.load(f)
-
-            if data['local_load'][0]['times'] == 0:
-                for n in range(len(data['scores'])):
-                    data['scores'][n]['score'] = 0
-                    with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-                        json.dump(data, f, ensure_ascii=False, indent=4)
-                data['local_load'][0]['times'] = 1
-                with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-            else:
-                data['local_load'][0]['times'] += 1
-                with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
-        except FileNotFoundError:
-            return "Error: Archivo no encontrado."
-        except json.JSONDecodeError:
-            return "Error: Formato de archivo JSON inválido."
-
-
-def save_score(n: int, count: int, system: str):
-    if system == "Linux":
+def check_json() -> str:
+    try:
         with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
             data = json.load(f)
 
-        data['scores'][n]['score'] = count
+        if data['local_load'][0]['times'] == 0:
+            for n in range(len(data['scores'])):
+                data['scores'][n]['score'] = 0
+                with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=4)
+            data['local_load'][0]['times'] = 1
+            with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+        else:
+            data['local_load'][0]['times'] += 1
+            with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+    except FileNotFoundError:
+        return "Error: Archivo no encontrado."
+    except json.JSONDecodeError:
+        return "Error: Formato de archivo JSON inválido."
 
-        with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-    else:
-        with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
-            data = json.load(f)
 
-        data['scores'][n]['score'] = count
+def save_score(n: int, count: int):
+    with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
 
-        with open(".\\assets\\high_scores.json", "w", encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+    data['scores'][n]['score'] = count
+
+    with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
 
-def load_restart_menu_icons(system: str):
-    if system == "Linux":
-        restart = pygame.image.load("./assets/reset.png")
-        menu = pygame.image.load("./assets/menu.png")
-    else:
-        restart = pygame.image.load(".\\assets\\reset.png")
-        menu = pygame.image.load(".\\assets\\menu.png")
+def load_restart_menu_icons():
+    restart = pygame.image.load("./assets/reset.png")
+    menu = pygame.image.load("./assets/menu.png")
 
     return restart, menu
