@@ -7,7 +7,7 @@ Even though the game was made to be published in english, the menus and levels a
 
 ## Development
 This project features a robust and comprehensive development setup, including:
-- **Total Lines of Code:** 1707
+- **Total Lines of Code:** 1781
 - **Modules:** 4
 - **Functions:** 26 (including those within classes)
 - **Classes:** 4
