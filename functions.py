@@ -15,8 +15,8 @@ def print_screen(screen: pygame.Surface, screen_size: tuple[int, int], system: s
     """
     pygame.display.set_caption("Fisiks")
     if system == "Linux":
-        icon = pygame.image.load(".//assets//icon.png")
-        bg = pygame.image.load(".//assets//background.png")
+        icon = pygame.image.load("./assets/icon.png")
+        bg = pygame.image.load("./assets/background.png")
     else:
         icon = pygame.image.load(".\\assets\\icon.png")
         bg = pygame.image.load(".\\assets\\background.png")
@@ -53,7 +53,7 @@ def main_menu(screen: pygame.Surface, screen_size: tuple[int, int], enlarge: boo
     text_surface = title_font.render(title, True, [0, 0, 0])
     buttons_font = pygame.font.SysFont("Calibri", buttons_font_size)
 
-    text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
+    text_rect = text_surface.get_rect(center=(screen_size[0] / 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
     box_width = screen_size[0] * 0.28
@@ -113,7 +113,7 @@ def draw_additional_ui_elements(screen: pygame.Surface, screen_size: tuple[int, 
     pygame.draw.rect(screen, [0, 0, 0], [
                      box_x, box_y, box_width, box_height], 2)
 
-    text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
+    text_rect = text_surface.get_rect(center=(screen_size[0] / 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
     title_font = pygame.font.SysFont(
@@ -140,7 +140,7 @@ def select_joke(system: str) -> str:
     """
     if system == "Linux":
         try:
-            with open(".//assets//jokes.json", "r", encoding='utf-8') as f:
+            with open("./assets/jokes.json", "r", encoding='utf-8') as f:
                 data = json.load(f)
             n = random.randint(0, len(data['jokes']) - 1)
             return data['jokes'][n]['joke']
@@ -206,7 +206,7 @@ def select_tip(system: str) -> str:
     """
     if system == "Linux":
         try:
-            with open(".//assets//tips.json", "r", encoding='utf-8') as f:
+            with open("./assets/tips.json", "r", encoding='utf-8') as f:
                 data = json.load(f)
             n = random.randint(0, len(data['tips']) - 1)
             return data['tips'][n]['tip']
@@ -283,7 +283,7 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int], syst
     title_y = screen_size[1] * 0.1
     title_font = pygame.font.SysFont("Calibri", title_font_size, bold=True)
     text_surface = title_font.render(title, True, [0, 0, 0])
-    text_rect = text_surface.get_rect(center=(screen_size[0] // 2, title_y))
+    text_rect = text_surface.get_rect(center=(screen_size[0] / 2, title_y))
     screen.blit(text_surface, text_rect)  # Title
 
     bg1 = pygame.image.load(".\\assets\\first_level.png")
@@ -311,7 +311,7 @@ def draw_play_menu_bg(screen: pygame.Surface, screen_size: tuple[int, int], syst
 
     if system == "Linux":
         try:
-            with open(".//assets//high_scores.json", "r", encoding='utf-8') as f:
+            with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
                 data = json.load(f)
                 length = len(data['scores'])
         except FileNotFoundError:
@@ -381,8 +381,8 @@ def final_menu(screen_size: tuple[int, int]) -> tuple[bool, int, int, int, int, 
     end = False
     text_box_width = int(screen_size[0] * 0.5)
     text_box_height = int(screen_size[1] * 0.5)
-    text_box_x = (screen_size[0] - text_box_width) // 2
-    text_box_y = (screen_size[1] - text_box_height) // 2
+    text_box_x = (screen_size[0] - text_box_width) / 2
+    text_box_y = (screen_size[1] - text_box_height) / 2
     # Box Enhorabuena
     box_font_size_congrats = int(screen_size[1] * 0.10)
     box_font_congrats = pygame.font.SysFont(
@@ -1114,7 +1114,7 @@ def choose_resolution_screen(system: str) -> tuple[bool, tuple[int, int]]:
     screen_size = screen_size_cr
     screen = pygame.display.set_mode((screen_size_cr[0], screen_size_cr[1]))
     if system == "Linux":
-        icon = pygame.image.load(".//assets//icon.png")
+        icon = pygame.image.load("./assets/icon.png")
     else:
         icon = pygame.image.load(".\\assets\\icon.png")
     pygame.display.set_icon(icon)
@@ -1241,20 +1241,20 @@ def choose_resolution_screen(system: str) -> tuple[bool, tuple[int, int]]:
 def check_json(system: str) -> str:
     if system == "Linux":
         try:
-            with open(".//assets//high_scores.json", "r", encoding='utf-8') as f:
+            with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
                 data = json.load(f)
 
             if data['local_load'][0]['times'] == 0:
                 for n in range(len(data['scores'])):
                     data['scores'][n]['score'] = 0
-                    with open(".//assets//high_scores.json", "w", encoding='utf-8') as f:
+                    with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
                         json.dump(data, f, ensure_ascii=False, indent=4)
                 data['local_load'][0]['times'] = 1
-                with open(".//assets//high_scores.json", "w", encoding='utf-8') as f:
+                with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=4)
             else:
                 data['local_load'][0]['times'] += 1
-                with open(".//assets//high_scores.json", "w", encoding='utf-8') as f:
+                with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=4)
         except FileNotFoundError:
             return "Error: Archivo no encontrado."
@@ -1285,12 +1285,12 @@ def check_json(system: str) -> str:
 
 def save_score(n: int, count: int, system: str):
     if system == "Linux":
-        with open(".//assets//high_scores.json", "r", encoding='utf-8') as f:
+        with open("./assets/high_scores.json", "r", encoding='utf-8') as f:
             data = json.load(f)
 
         data['scores'][n]['score'] = count
 
-        with open(".//assets//high_scores.json", "w", encoding='utf-8') as f:
+        with open("./assets/high_scores.json", "w", encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
     else:
         with open(".\\assets\\high_scores.json", "r", encoding='utf-8') as f:
@@ -1304,8 +1304,8 @@ def save_score(n: int, count: int, system: str):
 
 def load_restart_menu_icons(system: str):
     if system == "Linux":
-        restart = pygame.image.load(".//assets//reset.png")
-        menu = pygame.image.load(".//assets//menu.png")
+        restart = pygame.image.load("./assets/reset.png")
+        menu = pygame.image.load("./assets/menu.png")
     else:
         restart = pygame.image.load(".\\assets\\reset.png")
         menu = pygame.image.load(".\\assets\\menu.png")

@@ -18,7 +18,7 @@ if not quit_game:
 
     pygame.mixer.init()
     if system == "Linux":
-        pygame.mixer.music.load('.//assets//music.wav')
+        pygame.mixer.music.load('./assets/music.wav')
     else:
         pygame.mixer.music.load('.\\assets\\music.wav')
     pygame.mixer.music.play(-1)
@@ -55,8 +55,8 @@ if not quit_game:
     buttons_font_size = int(screen_size[1] * 0.06)
 
     if system == "Linux":
-        volume_on = pygame.image.load(".//assets//speaker_icon_on.png")
-        volume_off = pygame.image.load(".//assets//speaker_icon_off.png")
+        volume_on = pygame.image.load("./assets/speaker_icon_on.png")
+        volume_off = pygame.image.load("./assets/speaker_icon_off.png")
     else:
         volume_on = pygame.image.load(".\\assets\\speaker_icon_on.png")
         volume_off = pygame.image.load(".\\assets\\speaker_icon_off.png")
