@@ -34,9 +34,9 @@ The game loop includes handling event checks, volume control logic, button enlar
 
 ## Installation
 1. Requires Python 3 (tested on Python 3.12, but compatible with any version supporting Pygame and Pymunk).
-2. Install necessary libraries: Pygame, Pymunk, random, json.
+2. Install necessary libraries: Pygame and Pymunk (`pip install -r requirements.txt`).
 3. Clone the game repository from GitHub.
-4. Run `main.py` to start the game.
+4. Run `python main.py` from the repository root to start the game. Assets are loaded from the relative path `./assets`, so running it from another directory will fail.
 
 ## Usage
 - Launch the game by executing `main.py`.
